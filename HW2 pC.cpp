@@ -4,22 +4,23 @@
 using namespace std;
 
 int main() {
-    // string name;
-    // cin >> name;
-    // cout << "Hello, " << name << "!" << "\n";
+    int N = 0, M = 0, R = 0;
+    cin >> N >> M;
+    cin >> R;
 
-    vector<string> list = {"Hello, ", "Nick!"};
-    for (int i = 0; i < list.size(); i++) {
-        cout << list[i] << "\n";
-    }
-    cout << "\n";
-    
     // nested vector
-    vector<vector<string>> lists(3, {"12", "ab"});
-    for (int j = 0; j < lists.size(); j++) {
-        cout << j << "\n";
-        for (int i = 0; i < lists[j].size(); i++) {
-            cout << lists[j][i] << "\n";
+    vector<vector<int>> routes(R, {0, 0});
+    for (int i = 0; i < routes.size(); i++) {
+        cin >> routes[i][0] >> routes[i][1];
+    }
+
+    cout << "\n";
+
+    cout << "N=" << N << ", M=" << M << "\n";
+
+    for (int i = 0; i < routes.size(); i++) {
+        for (int j = 0; j < routes[i].size(); j++) {
+            cout << routes[i][j] << " ";
         }
         cout << "\n";
     }
