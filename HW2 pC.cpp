@@ -19,8 +19,8 @@ void print_routes(vector<vector<int>> routes) {
 }
 
 bool is_valid(vector<int> p, vector<int> q) {
-    // p_start <= q_start AND p_end < q_end
-    return (p[1] <= q[1] && p[0] < q[0]);
+    // p_start < q_start AND p_end < q_end
+    return (p[1] < q[1] && p[0] < q[0]);
 }
 
 int main() {
