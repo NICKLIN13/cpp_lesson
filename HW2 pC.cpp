@@ -39,11 +39,14 @@ int main() {
     print_routes(routes); // TEST
 
     // Count the valid routes of each combination
-        // Generate all combinations?
-        // Examine valid routes
-            // Define is_valid() // DONE
+        // Generate all combinations? NO!
 
-    // Find the max count
+        // 1. Choose a route as the first one
+        // 2. Add another new route, one by one
+        // 3. Examine if the new route is valid
+            // Define is_valid() // DONE
+            // Compare the new route with the previous route
+        // 4. Find the max count
 
 
 }
