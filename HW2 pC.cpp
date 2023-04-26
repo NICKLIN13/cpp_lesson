@@ -13,6 +13,11 @@ void print_routes(vector<vector<int>> routes) {
     cout << "\n";
 }
 
+bool is_valid(vector<int> p, vector<int> q) {
+    // p_start <= q_start AND p_end < q_end
+    return (p[1] <= q[1] && p[0] < q[0]);
+}
+
 int main() {
     int N = 0, M = 0, R = 0;
     cin >> N >> M;
@@ -36,7 +41,7 @@ int main() {
     // Count the valid routes of each combination
         // Generate all combinations?
         // Examine valid routes
-            // Define is_valid()
+            // Define is_valid() // DONE
 
     // Find the max count
 
