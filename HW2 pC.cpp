@@ -39,14 +39,17 @@ int main() {
     print_routes(routes); // TEST
 
     // Count the valid routes of each combination
-        // Generate all combinations? NO!
+    // 1. Choose a route as the first one
+    for (int i = 0; i < routes.size(); i++) {
+        vector<vector<int>> combination;
+        combination.push_back(routes[i]);
+    }
 
-        // 1. Choose a route as the first one
-        // 2. Add another new route, one by one
-        // 3. Examine if the new route is valid
-            // Define is_valid() // DONE
-            // Compare the new route with the previous route
-        // 4. Find the max count
+    // 2. Add another new route, one by one
+    // 3. Examine if the new route is valid
+        // Define is_valid() // DONE
+        // Compare the new route with the previous route
+    // 4. Find the max count
 
 
 }
