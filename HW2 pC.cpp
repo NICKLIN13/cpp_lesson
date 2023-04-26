@@ -16,7 +16,6 @@ void print_routes(vector<vector<int>> routes) {
         }
         cout << "\n";
     }
-    cout << "\n";
 }
 
 bool is_valid(vector<int> p, vector<int> q) {
@@ -54,27 +53,25 @@ int main() {
     for (int i = 0; i < routes.size(); i++) {
 
         if (DEBUG) cout << "i=" << i << "\n";
-        vector<vector<int>> combination;
-        combination.push_back(routes[i]);
-        if (DEBUG) print_r(routes[i]);
+        vector<int> combination;
+        combination.push_back(i);
 
         // 2. Add another new route, one by one
         for (int j = i + 1; j < routes.size(); j++) {
             // 3. Examine if the new route is valid
                 // Define is_valid() // DONE
                 // Compare the new route with the previous route
-            vector<int> previous_r = combination[combination.size() - 1];
-            vector<int> new_r = routes[j];
-            if (is_valid(previous_r, new_r)) {
-                combination.push_back(new_r);
-                if (DEBUG) print_routes(combination);
-
+            int previous_r = combination[combination.size() - 1];
+            if (is_valid(routes[previous_r], routes[j])) {
+                combination.push_back(j);
             }
         }
 
         // Check comination
         if (DEBUG) {
-            print_routes(combination); 
+            for (int i = 0; i < combination.size(); i++) {
+                print_r(routes[combination[i]]);
+            }
             cout << "size = " << combination.size() << "\n\n";
         }
 
