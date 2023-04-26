@@ -58,7 +58,7 @@ int main() {
             // 3. Examine if the new route is valid
                 // Define is_valid() // DONE
                 // Compare the new route with the previous route
-            vector<int> previous = routes[combination.size() - 1];
+            vector<int> previous = combination[combination.size() - 1];
             vector<int> new_ = routes[j];
             if (is_valid(previous, new_)) {
                 combination.push_back(new_);
