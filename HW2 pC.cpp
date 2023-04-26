@@ -3,8 +3,12 @@
 #include <vector>
 using namespace std;
 
+void print_r(vector<int> r) {
+    cout << r[0] << "," << r[1] << "\n";
+}
+
 void print_routes(vector<vector<int>> routes) {
-        for (int i = 0; i < routes.size(); i++) {
+    for (int i = 0; i < routes.size(); i++) {
         for (int j = 0; j < routes[i].size(); j++) {
             cout << routes[i][j] << " ";
         }
@@ -39,17 +43,47 @@ int main() {
     print_routes(routes); // TEST
 
     // Count the valid routes of each combination
+
+    int max = 0;
     // 1. Choose a route as the first one
     for (int i = 0; i < routes.size(); i++) {
+
+        cout << "i=" << i << "\n"; // TEST
         vector<vector<int>> combination;
         combination.push_back(routes[i]);
+        print_r(routes[i]); // TEST
+
+        // 2. Add another new route, one by one
+        for (int j = i + 1; j < routes.size(); j++) {
+            // 3. Examine if the new route is valid
+                // Define is_valid() // DONE
+                // Compare the new route with the previous route
+            vector<int> previous = routes[combination.size() - 1];
+            vector<int> new_ = routes[j];
+            if (is_valid(previous, new_)) {
+                combination.push_back(new_);
+                
+                // TEST
+                // cout << combination.size() << ":\n";
+                // cout << "prev = ";
+                // print_r(previous);
+                // print_r(new_);
+                // cout << "\n";
+                print_routes(combination);
+
+            }
+        }
+
+        // Check comination // TEST
+        // print_routes(combination); 
+        cout << "size = " << combination.size() << "\n\n";
+
+        max = (combination.size() > max) ? combination.size() : max;
     }
 
-    // 2. Add another new route, one by one
-    // 3. Examine if the new route is valid
-        // Define is_valid() // DONE
-        // Compare the new route with the previous route
-    // 4. Find the max count
+
+        // 4. Find the max count
+        cout << "max = " << max << "\n";
 
 
 }
