@@ -1,22 +1,11 @@
 #include <iostream>
 #include <array>
+#include <vector>
 #include <algorithm>
 using namespace std;
 
 bool DEBUG = false;
-const long long R_MAX = 100001; // HOTFIX
-void print_r(array<long long, 2> r) {
-    cout << r[0] << "," << r[1] << "\n";
-}
-
-void print_routes(array<array<long long, 2>, R_MAX>& routes, long long R) {
-    for (long long i = 0; i < R; i++) {
-        for (long long j = 0; j < 2; j++) {
-            cout << routes[i][j] << " ";
-        }
-        cout << "\n";
-    }
-}
+const long long R_MAX = 1000001;
 
 bool is_valid(array<long long, 2> p, array<long long, 2> q) {
     // p_start < q_start AND p_end < q_end
@@ -33,7 +22,7 @@ int main() {
     cin >> R;
 
     // Read inputs
-    array<array<long long, 2>, R_MAX> routes{};
+    vector<array<long long, 2>> routes(R, {0, 0});
     for (long long i = 0; i < R; i++) {
         cin >> routes[i][0] >> routes[i][1];
     }
@@ -42,16 +31,12 @@ int main() {
     if (DEBUG) {
         cout << "\n";
         cout << "N=" << N << ", M=" << M << "\n";
-        print_routes(routes, R);
     }
 
     // Sort routes
     sort(routes.begin(), routes.begin()+R);
-    if (DEBUG) print_routes(routes, R);
 
-    // 
-    array<long long, R_MAX> dp;
-    fill(dp.begin(), dp.end(), 1);
+    long long dp[R_MAX] = {1};
     for (long long i = 0; i < R; i++) {
         if (DEBUG) cout << "i=" << i << "\n";
 
@@ -63,5 +48,5 @@ int main() {
     }
 
     // 4. Find the max count
-    cout << *max_element(dp.begin(), dp.end()) << "\n";
+    cout << *max_element(dp, dp+R) << "\n";
 }
