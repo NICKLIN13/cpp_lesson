@@ -4,8 +4,7 @@
 using namespace std;
 
 bool DEBUG = false;
-const long long R_MAX = 10000;
-
+const long long R_MAX = 100001; // HOTFIX
 void print_r(array<long long, 2> r) {
     cout << r[0] << "," << r[1] << "\n";
 }
@@ -25,6 +24,9 @@ bool is_valid(array<long long, 2> p, array<long long, 2> q) {
 }
 
 int main() {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
     // DEBUG = true;
     long long N = 0, M = 0, R = 0;
     cin >> N >> M;
@@ -47,76 +49,19 @@ int main() {
     sort(routes.begin(), routes.begin()+R);
     if (DEBUG) print_routes(routes, R);
 
-    // Count the valid routes of each combination
-
-    long long max = 1;
-
-
-    // 1. Choose a route as the first one
+    // 
+    array<long long, R_MAX> dp;
+    fill(dp.begin(), dp.end(), 1);
     for (long long i = 0; i < R; i++) {
         if (DEBUG) cout << "i=" << i << "\n";
-        array<long long, R_MAX> combination{};
-        long long combination_size = 0;
-        combination[combination_size++] = i;
 
-        // 2. Add another new route, one by one
-        for (long long j = i + 1; j < R; j++) {
-            // 3. Examine if the new route is valid
-                // Define is_valid() // DONE
-                // Compare the new route with the previous route
-            long long previous_r = combination[combination_size - 1];
-            if (is_valid(routes[previous_r], routes[j])) {
-                combination[combination_size++] = j;
+        for (long long j = 0; j < i; j++) {
+            if (is_valid(routes[j], routes[i]) && dp[i] < dp[j] + 1) {
+                dp[i] = dp[j] + 1;
             }
         }
-
-        // Check combination
-        if (DEBUG) {
-            for (long long k = 0; k < combination_size; k++) {
-                print_r(routes[combination[k]]);
-            }
-            cout << "size = " << combination_size << "\n\n";
-        }
-
-        max = (combination_size > max) ? combination_size : max;
-    }
-
-    // GO BACKWARDS
-
-    // 1. Choose a route as the first one
-    // GO BACKWARDS
-    for (long long i = R - 1; i >= 0; i--) {
-        if (DEBUG) cout << "i=" << i << "\n";
-        array<long long, R_MAX> combination{};
-        long long combination_size = 0;
-        combination[combination_size++] = i;
-
-        // 2. Add another new route, one by one
-        // GO BACKWARDS
-        for (long long j = i - 1; j >= 0; j--) {
-            // 3. Examine if the new route is valid
-                // Define is_valid()
-                // Compare the new route with the previous route
-            long long previous_r = combination[combination_size - 1];
-            // GO BACKWARDS
-            if (is_valid(routes[j], routes[previous_r])) {
-                combination[combination_size++] = j;
-            }
-        }
-
-        // Check combination
-        if (DEBUG) {
-            for (long long k = 0; k < combination_size; k++) {
-                print_r(routes[combination[k]]);
-            }
-            cout << "size = " << combination_size << "\n\n";
-        }
-
-        max = (combination_size > max) ? combination_size : max;
     }
 
     // 4. Find the max count
-    cout << max << "\n";
-
-
+    cout << *max_element(dp.begin(), dp.end()) << "\n";
 }
