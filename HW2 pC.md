@@ -74,3 +74,17 @@ Input 3:
 5 5
 Output 3:
 4
+
+## HINT
+How can we represent a valid arrangement of flight routes? Can you identify any patterns from the valid arrangements?
+Make sure to check the data range.
+You might want to take a look at non-programming homework if you have no idea.
+
+# non-programming homework
+Can I refer to resources from the Internet or other sources that are not from textbooks
+or lecture slides?
+• Yes, but you must include a reference source, such as a website or book title and
+page number, and attach it as a comment at the top of the code.
+• Although you can refer to external resources, please write your own code after
+the reference.
+• Remember to specify the references; otherwise we’ll view it as cheating
