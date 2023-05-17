@@ -60,22 +60,5 @@ int main(){
             cout << edge.first << " " << edge.second << "\n";
         }
     }
-
-    for(long long i = 0; i < N; i++) {
-        cout << i << " " << visited[i] << " " << low[i] << "\n";
-    }
     return 0;
 }
-
-/*
-
-6 7
-0 1
-1 4
-0 4
-2 5
-2 3
-3 5
-0 5
-
-*/
