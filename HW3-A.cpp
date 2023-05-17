@@ -9,27 +9,27 @@ vector<pair<long long, long long>> ans;
 vector<long long> visited, low;
 long long timer = 1; // Should be bigger than 0 (default value of visited)
 
-void dfs(long long curr, long long prev) {
-    visited[curr] = low[curr] = timer++; // Set current timer
-    for (auto next : adj[curr]) { // Visit all adj nodes)
+void dfs(long long curr_id, long long prev_id) {
+    visited[curr_id] = low[curr_id] = timer++; // Set current timer
+    for (auto next_id : adj[curr_id]) { // Visit all adj nodes
 
-        if (visited[next] == 0) { // If next is NOT visited yet
-            dfs(next, curr); // Go deeper
-            low[curr] = min(low[curr], low[next]); // Update low
-        } else if (next != prev) { // If next IS visited AND next is NOT prev
+        if (visited[next_id] == 0) { // If next_id is NOT visited yet
+            dfs(next_id, curr_id); // Go deeper
+            low[curr_id] = min(low[curr_id], low[next_id]); // Back-tracking: Update low of curr_id
+
+            // After next_id is checked
+            if (low[next_id] > visited[curr_id]) { // If next_id is not in a loop
+                auto a = min(curr_id, next_id);
+                auto b = max(curr_id, next_id);
+                ans.push_back({a, b}); // A bridge is found. Add it to the ans
+            }
+
+        } else if (next_id != prev_id) { // If next_id IS visited AND next_id is NOT prev_id
             // Do NOT go deeper
-            low[curr] = min(low[curr], visited[next]); // A loop is found. Update low
-
-            // Initial condition: curr == 0, prev == -1 
-            // => low[curr] = visited[next] = 0
+            low[curr_id] = min(low[curr_id], visited[next_id]); // A loop is found. Update low of curr_id
         }
-
-        // After next is checked
-        if (low[next] > visited[curr]) { // If next is not in a loop
-            auto a = min(curr, next);
-            auto b = max(curr, next);
-            ans.push_back({a, b}); // A bridge is found. Add it to the ans
-        }
+        // else: next_id == prev_id
+        // => U-turned. Do nothing
     }
     
 
@@ -60,5 +60,22 @@ int main(){
             cout << edge.first << " " << edge.second << "\n";
         }
     }
+
+    for(long long i = 0; i < N; i++) {
+        cout << i << " " << visited[i] << " " << low[i] << "\n";
+    }
     return 0;
 }
+
+/*
+
+6 7
+0 1
+1 4
+0 4
+2 5
+2 3
+3 5
+0 5
+
+*/
