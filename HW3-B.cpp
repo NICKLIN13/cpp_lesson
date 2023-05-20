@@ -5,10 +5,12 @@
 #include <string>
 #include <iomanip>      // for setw()
 #include <stdexcept>
+#include <limits>
 
 bool debug = false;
-const long long inf = 10000; // infinity
-const long long neg_inf = -inf; // Negative infinity
+const long long inf = std::numeric_limits<long long>::max();
+const long long neg_inf = std::numeric_limits<long long>::min();
+
 
 class GraphMinMaxST{
 private:
