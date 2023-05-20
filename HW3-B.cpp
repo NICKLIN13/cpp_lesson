@@ -35,10 +35,10 @@ public:
 
     void PrintSum();
     int Bottleneck();
-    int MinOrMaxKeyExtract(int *key, bool *visited);
+    int MinOrMaxKeyExtract(std::vector<int> key, std::vector<bool> visited);
 };
 
-int GraphMinMaxST::MinOrMaxKeyExtract(int *key, bool *visited){
+int GraphMinMaxST::MinOrMaxKeyExtract(std::vector<int> key, std::vector<bool> visited){
     int index = 0;
     int min_key = inf, max_key = neg_inf;
 
@@ -58,27 +58,22 @@ int GraphMinMaxST::MinOrMaxKeyExtract(int *key, bool *visited){
 
 void GraphMinMaxST::PrimMST(int Start, int indexStart){
 
-    int key[num_vertex], predecessor[num_vertex];
-    bool visited[num_vertex];
-
-    for (int i = 0; i < num_vertex; i++) {
-        key[i] = (is_minimum) ? inf : neg_inf;
-        predecessor[i] = -1;
-        visited[i] = false;
-    }
+    std::vector<int> key(num_vertex, (is_minimum) ? inf : neg_inf);
+    std::vector<int> predecessor(num_vertex, -1);
+    std::vector<bool> visited(num_vertex, false);
 
     key[Start] = 0;
     for (int i = 0; i < num_vertex; i++) {
-        int j = MinOrMaxKeyExtract(key, visited);
-        visited[j] = true;
-        auto w = AdjMatrix[j][i];
-        for (int i = 0; i < num_vertex; i++) {
-            if (visited[i] || w == 0) continue;
+        int curr = MinOrMaxKeyExtract(key, visited);
+        visited[curr] = true;
+        for (int next = 0; next < num_vertex; next++) {
+            auto adj = AdjMatrix[curr][next];
+            if (visited[next] || adj == 0) continue;
 
-            bool criteria = (is_minimum) ? (w < key[i]) : (w > key[i]);
+            bool criteria = (is_minimum) ? (adj < key[next]) : (adj > key[next]);
             if (criteria) {
-                predecessor[i] = j;
-                key[i] = w;
+                predecessor[next] = curr;
+                key[next] = adj;
             }
         }
     }
