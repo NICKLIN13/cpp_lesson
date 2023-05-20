@@ -102,6 +102,7 @@ int main(){
     }
     g.PrimMST(0);
 
+    // If there is still more than one way to meet the above two points, the total energy consumption of the network should be minimized. In other words, the sum of bandwidths of the remaining cables should be minimized.
 
     return 0;
 }
