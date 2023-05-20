@@ -50,7 +50,9 @@ int main(){
         adj[v].push_back(u);
     }
 
-    dfs(0, -1);
+    for(long long i = 0; i < N; i++) {
+        dfs(i, -1);
+    }
 
     if(ans.empty()){
         cout << "No Critical Road\n";

@@ -23,3 +23,37 @@ Output:
 Output all roads that, if under maintenance, will cause certain shops to be unable to reach certain other shops. The output format should be the two shop numbers connected by the road, listed in ascending order of their numbers, means that u < v.
 
 Each road listed in ascending order by u. If there are two edges with the same u, then they should be ordered by v in ascending order. If there are no critical road, output "No Critical Road".
+
+input:
+8 4
+0 1
+2 3
+4 5
+6 7
+output:
+0 1
+2 3
+4 5
+6 7
+題目初始的圖不一定全部連在一起
+
+
+input:
+10 11
+2 4
+2 7
+2 5
+5 7
+5 8
+5 6
+6 9 
+6 3
+3 9
+1 3
+0 1
+output:
+0 1
+1 3
+2 4
+5 6
+5 8
