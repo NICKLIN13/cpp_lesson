@@ -26,13 +26,17 @@ struct Block {
     int timer;
 };
 
+struct Position {
+    int x, y;
+};
+
 class Lava {
 private:
     const int N, M;
     vector<vector<Block> > room;
-    queue<Block> q;
+    queue<Position> q;
 public:
-    int timer = 0;
+    int timer_ = 0;
     Lava(int N, int M): N(N), M(M) {
         room.resize(N+2);
         for (int i = 0; i < N+2; i++) {
@@ -41,7 +45,9 @@ public:
     }
 
     bool IsQEmpty() {
-        return q.empty();
+        int x = q.front().x, y = q.front().y;
+        auto curr = GetBlock(x, y);
+        return (curr.timer > timer_);
     }
 
     bool IsValidPosition(int x, int y) {
@@ -52,7 +58,7 @@ public:
         return room[x+1][y+1];
     }
 
-    void SetBlock(int x, int y, char type) {
+    void SetBlock(int x, int y, char type, int timer) {
         if (!IsValidPosition(x, y)) return;
         room[x+1][y+1] = Block{x, y, type, timer};
     }
@@ -70,40 +76,13 @@ public:
         }
     }
 
-    // A recursive function to replace previous color 'prevC' at  '(x, y)'
-    // and all surrounding pixels of (x, y) with new color 'newC' and
-    void floodFillUtil(int x, int y, char prevC, char newC)
-    {
-        if (!IsValidPosition(x, y)) return;
-
-        auto currC = GetBlock(x, y).type;
-        if (currC != prevC) return;
-        if (currC == newC) return;
-
-        // Replace the color at (x, y)
-        SetBlock(x, y, newC);
-
-        // Recur for north, east, south and west
-        floodFillUtil(x+1, y, prevC, newC);
-        floodFillUtil(x-1, y, prevC, newC);
-        floodFillUtil(x, y+1, prevC, newC);
-        floodFillUtil(x, y-1, prevC, newC);
-    }
-
-    // It mainly finds the previous color on (x, y) and
-    // calls floodFillUtil()
-    void floodFill(int x, int y, char newC)
-    {
-        char prevC = GetBlock(x, y).type;
-        if (prevC == newC) return;
-        floodFillUtil(x, y, prevC, newC);
-    }
-
     void SetLava(int x, int y) {
         if (!IsValidPosition(x, y)) return;
         if (GetBlock(x, y).type != 'C') return;
-        SetBlock(x, y, 'L');
-        q.push(GetBlock(x, y));
+        if (GetBlock(x, y).type == 'L') return;
+        SetBlock(x, y, 'L', timer_ + 1);
+        PrintRoom();
+        q.push({x, y});
     }
 
     void SpreadLava(int x, int y) {
@@ -115,11 +94,18 @@ public:
 
     void Run() {
         while (!q.empty()) {
-            auto curr = q.front();
+            if (debug) cout << "q:" << q.size() << "\n";
+            // HOTFIX use debugger when using c++ -O2 optmiser might break this
+            int x = q.front().x, y = q.front().y;
+            auto curr = GetBlock(x, y);
+
+            if (debug) cout << curr.x << " " << curr.y << " "  << curr.type << " " << curr.timer << "\n";
+            if (debug) cout << "timer_:" << timer_ << "\n";
+            if (curr.timer > timer_) break;
             q.pop();
+
             SpreadLava(curr.x, curr.y);
         }
-        
     }
 };
 
@@ -127,7 +113,7 @@ public:
 // Driver code
 int main()
 {
-    debug = false;
+    // debug = false;
     stringstream cin("3 4\nCCCD\nCCCC\nBCLC");
 
     int N, M;
@@ -141,10 +127,10 @@ int main()
         for (int j = 0; j < M; j++) {
             auto type = row[j];
             if (type == 'L') {
-                l.SetBlock(i, j, 'C'); // Lava must set on 'C'
+                l.SetBlock(i, j, 'C', 0); // Lava must set on 'C'
                 l.SetLava(i, j);
             } else {
-                l.SetBlock(i, j, type);
+                l.SetBlock(i, j, type, 0);
             }
         }
     }
@@ -158,13 +144,20 @@ int main()
         l.SetBorder(N, j);
     }
 
+    if (debug) {
+        l.PrintRoom();
+        cout << "\n";
+    }
 
-    // while (true) {
-    //     l.timer++;
-    //     l.Run();
-    //     if (l.IsQEmpty()) break;
-    // }
+    while (true) {
+        l.timer_++;
+        l.Run();
+        if (l.IsQEmpty()) break;
+    }
 
-    l.PrintRoom();
+    if (debug) {
+        l.PrintRoom();
+        cout << "\n";
+    }
 
 }
