@@ -7,6 +7,8 @@
 #include <queue>
 #include <map>
 
+#define ll long long
+
 using namespace std;
 
 bool debug = true;
@@ -15,23 +17,23 @@ map<char, char> mp { {'O', '='}, {'C', '.'}, {'L', 'L'}, {'B', 'B'}, {'D', 'D'},
 };
 
 struct Block {
-    int x;
-    int y;
+    ll x;
+    ll y;
     char type;
-    int timer;
+    ll timer;
 };
 
 struct Position {
-    int x, y;
+    ll x, y;
 };
 
 // [Union-Find / Disjoint-Set – 陪你刷題 – haogroot's Blog](https://haogroot.com/2021/01/29/union_find-leetcode/)
 class UnionFind {
     public:
-    UnionFind(int N, int M) {
+    UnionFind(ll N, ll M) {
         count = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
+        for (ll i = 0; i < N; i++) {
+            for (ll j = 0; j < M; j++) {
                 parent.push_back(i*M + j);
                 count++;
                 rank.push_back(0);
@@ -39,16 +41,16 @@ class UnionFind {
         }
     }
 
-    int find(int i) { // path compression
+    ll find(ll i) { // path compression
         if (i != parent[i]) {
             parent[i] = find(parent[i]);
         }
         return parent[i];
     }
 
-    void Union(int x, int y) { // union with rank
-        int root_x = find (x);
-        int root_y = find (y);
+    void Union(ll x, ll y) { // union with rank
+        ll root_x = find (x);
+        ll root_y = find (y);
         if (root_x != root_y) {
             if (rank[root_x] > rank[root_y]) {
                 parent[root_y] = root_x;
@@ -62,51 +64,51 @@ class UnionFind {
         }
     }
 
-    int getCount() const {
+    ll getCount() const {
         return count;
     }
 
     private:
-    vector<int> parent;
-    vector<int> rank;
-    int count; // # of connected components
+    vector<ll> parent;
+    vector<ll> rank;
+    ll count; // # of connected components
 };
 
 class Lava {
 private:
-    const int N, M;
+    const ll N, M;
     vector<vector<Block>> room;
     queue<Position> q;
     UnionFind uf;
 public:
-    int timer_ = 0;
-    Lava(int N, int M): N(N), M(M), uf(N, M) {
+    ll timer_ = 0;
+    Lava(ll N, ll M): N(N), M(M), uf(N, M) {
         room.resize(N+2);
-        for (int i = 0; i < N+2; i++) {
+        for (ll i = 0; i < N+2; i++) {
             room[i].resize(M+2);
         }
     }
 
     bool IsQEmpty() {
-        int x = q.front().x, y = q.front().y;
+        ll x = q.front().x, y = q.front().y;
         auto curr = GetBlock(x, y);
         return (curr.timer > timer_);
     }
 
-    bool IsValidPosition(int x, int y) {
+    bool IsValidPosition(ll x, ll y) {
         return (x >= 0 && x < N && y >= 0 && y < M);
     }
 
-    Block GetBlock(int x, int y) {
+    Block GetBlock(ll x, ll y) {
         return room[x+1][y+1];
     }
 
-    void SetBlock(int x, int y, char type, int timer) {
+    void SetBlock(ll x, ll y, char type, ll timer) {
         if (!IsValidPosition(x, y)) return;
         room[x+1][y+1] = Block{x, y, type, timer};
     }
 
-    void SetBorder(int x, int y) {
+    void SetBorder(ll x, ll y) {
         room[x+1][y+1] = Block{x, y, 'O', 0};
     }
 
@@ -119,7 +121,7 @@ public:
         }
     }
 
-    void SetLava(int x, int y) {
+    void SetLava(ll x, ll y) {
         if (!IsValidPosition(x, y)) return;
         if (GetBlock(x, y).type != 'C') return;
         if (GetBlock(x, y).type == 'L') return;
@@ -128,18 +130,29 @@ public:
         q.push({x, y});
     }
 
-    void SpreadLava(int x, int y) {
+    void SpreadLava(ll x, ll y) {
         SetLava(x-1, y);
         SetLava(x+1, y);
         SetLava(x, y-1);
         SetLava(x, y+1);
     }
 
+    void UnionLava(ll x1, ll y1, ll x2, ll y2) {
+        uf.Union(
+            xy2uf(x1, y1),
+            xy2uf(x2, y2)
+        );
+    }
+
+    ll xy2uf(ll x, ll y) {
+        return (x+1) * N + (y+1);
+    }
+
     void Run() {
         while (!q.empty()) {
             if (debug) cout << "q:" << q.size() << "\n";
             // use debugger when using c++ -O2 optmiser might break this
-            int x = q.front().x, y = q.front().y;
+            ll x = q.front().x, y = q.front().y;
             auto curr = GetBlock(x, y);
 
             if (debug) cout << curr.x << " " << curr.y << " "  << curr.type << " " << curr.timer << "\n";
@@ -158,15 +171,15 @@ int main()
     // debug = false;
     stringstream cin("3 4\nCCCD\nCCCC\nBCLC");
 
-    int N, M;
+    ll N, M;
     cin >> N >> M;
     Lava l(N, M);
 
     // Initialization
-    for (int i = 0; i < N; i++) {
+    for (ll i = 0; i < N; i++) {
         string row;
         cin >> row;
-        for (int j = 0; j < M; j++) {
+        for (ll j = 0; j < M; j++) {
             auto type = row[j];
             if (type == 'L') {
                 l.SetBlock(i, j, 'C', 0); // Lava must set on 'C'
@@ -177,11 +190,11 @@ int main()
         }
     }
 
-    for (int i = -1; i <= N; i++) {
+    for (ll i = -1; i <= N; i++) {
         l.SetBorder(i, -1);
         l.SetBorder(i, M);
     }
-    for (int j = -1; j <= M; j++) {
+    for (ll j = -1; j <= M; j++) {
         l.SetBorder(-1, j);
         l.SetBorder(N, j);
     }
