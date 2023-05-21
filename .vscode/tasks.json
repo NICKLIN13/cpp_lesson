@@ -2,12 +2,13 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: clang++ build active file",
-            "command": "/usr/bin/clang++",
+            "label": "C++17: g++ build active file",
+            "command": "g++",
             "args": [
-                "-fcolor-diagnostics",
-                "-fansi-escape-codes",
-                "-Wno-c++11-extensions",
+                "-O2",
+                "-w",
+                "-fmax-errors=3",
+                "-std=c++17",
                 "-g",
                 "${file}",
                 "-o",

@@ -100,7 +100,7 @@ void Lava::floodFill(int x, int y, char newC)
 }
 
 void Lava::EnqueueLava(int x, int y) {
-    q.push(room[x][y]);
+    q.push(GetBlock(x, y));
 }
 
 void Lava::SpreadLava(int x, int y, char prevC, char newC)
