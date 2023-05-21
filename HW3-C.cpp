@@ -8,10 +8,15 @@ using namespace std;
 
 bool debug = true;
 
+struct Block {
+    char type;
+    int timer = 0;
+};
+
 class Lava {
 private:
     const int N, M;
-    vector<vector<char>> room;
+    vector<vector<Block> > room;
     void floodFillUtil(int x, int y, char prevC, char newC);
 public:
     Lava(int N, int M): N(N), M(M) {
@@ -20,23 +25,33 @@ public:
             room[i].resize(M);
         }
     }
-    void SetRoom(int x, int y, char C);
+    void SetType(int x, int y, char C);
+    char GetType(int x, int y);
+    bool IsValidPosition(int x, int y);
     void PrintRoom();
     void floodFill(int x, int y, char newC);
 
 };
 
-void Lava::SetRoom(int x, int y, char c) {
-    if (debug) cout << x << "," << y << " = " << c << "\n";
-    room[x][y] = c;
-    if (debug) cout << "done\n";
+bool Lava::IsValidPosition(int x, int y) {
+    return (x >= 0 && x < N && y >= 0 && y < M);
+}
 
+char Lava::GetType(int x, int y) {
+    if (!IsValidPosition(x, y)) return 'X';
+    return room[x][y].type;
+}
+
+void Lava::SetType(int x, int y, char c) {
+    if (debug) cout << x << "," << y << " = " << c << "\n";
+    room[x][y].type = c;
+    if (debug) cout << "done\n";
 }
 
 void Lava::PrintRoom() {
     for (auto row: room) {
         for (auto col: row) {
-            cout << col;
+            cout << col.type;
         }
         cout << "\n";
     }
@@ -46,16 +61,14 @@ void Lava::PrintRoom() {
 // and all surrounding pixels of (x, y) with new color 'newC' and
 void Lava::floodFillUtil(int x, int y, char prevC, char newC)
 {
-    // Base cases
-    if (x < 0 || x >= N || y < 0 || y >= M)
-        return;
-    if (room[x][y] != prevC)
-        return;
-    if (room[x][y] == newC)
-        return;
+    if (!IsValidPosition(x, y)) return;
+
+    auto currC = GetType(x, y);
+    if (currC != prevC) return;
+    if (currC == newC) return;
 
     // Replace the color at (x, y)
-    SetRoom(x, y, newC);
+    SetType(x, y, newC);
 
     // Recur for north, east, south and west
     floodFillUtil(x+1, y, prevC, newC);
@@ -68,7 +81,7 @@ void Lava::floodFillUtil(int x, int y, char prevC, char newC)
 // calls floodFillUtil()
 void Lava::floodFill(int x, int y, char newC)
 {
-    char prevC = room[x][y];
+    char prevC = GetType(x, y);
     if (prevC == newC) return;
     floodFillUtil(x, y, prevC, newC);
 }
@@ -85,7 +98,7 @@ int main()
         string row;
         cin >> row;
         for (int j = 0; j < M; j++) {
-            l.SetRoom(i, j, row[j]);
+            l.SetType(i, j, row[j]);
         }
     }
     l.floodFill(0, 0, 'A');
