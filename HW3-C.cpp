@@ -33,21 +33,27 @@ private:
     void floodFillUtil(int x, int y, char prevC, char newC);
     queue<Block> q;
 public:
+    int timer = 0;
     Lava(int N, int M): N(N), M(M) {
         room.resize(N+2);
         for (int i = 0; i < N+2; i++) {
             room[i].resize(M+2);
         }
     }
-    void SetBlock(int x, int y, char type, int timer);
+    void SetBlock(int x, int y, char type);
     Block GetBlock(int x, int y);
     bool IsValidPosition(int x, int y);
     void PrintRoom();
     void floodFill(int x, int y, char newC);
-    void EnqueueLava(int x, int y);
-    void SpreadLava(int x, int y, char prevC, char newC);
-
+    void SetLava(int x, int y);
+    void SpreadLava(int x, int y);
+    bool IsQEmpty();
+    void Run();
 };
+
+bool Lava::IsQEmpty() {
+    return q.empty();
+}
 
 bool Lava::IsValidPosition(int x, int y) {
     return (x >= 0 && x < N && y >= 0 && y < M);
@@ -57,8 +63,12 @@ Block Lava::GetBlock(int x, int y) {
     return room[x+1][y+1];
 }
 
-void Lava::SetBlock(int x, int y, char type, int timer) {
+void Lava::SetBlock(int x, int y, char type) {
+    // if (!IsValidPosition(x, y)) return; // DOING
     room[x+1][y+1] = Block{x, y, type, timer};
+    if (type == 'L') {
+        SetLava(x, y);
+    }
 }
 
 void Lava::PrintRoom() {
@@ -81,7 +91,7 @@ void Lava::floodFillUtil(int x, int y, char prevC, char newC)
     if (currC == newC) return;
 
     // Replace the color at (x, y)
-    SetBlock(x, y, newC, GetBlock(x, y).timer);
+    SetBlock(x, y, newC);
 
     // Recur for north, east, south and west
     floodFillUtil(x+1, y, prevC, newC);
@@ -99,20 +109,27 @@ void Lava::floodFill(int x, int y, char newC)
     floodFillUtil(x, y, prevC, newC);
 }
 
-void Lava::EnqueueLava(int x, int y) {
+void Lava::SetLava(int x, int y) {
+    if (!IsValidPosition(x, y)) return;
+    if (GetBlock(x, y).type != 'C') return;
+    SetBlock(x, y, 'L'); // TODO LOOP?
     q.push(GetBlock(x, y));
 }
 
-void Lava::SpreadLava(int x, int y, char prevC, char newC)
-{
-    if (!IsValidPosition(x, y)) return;
+void Lava::SpreadLava(int x, int y) {
+    SetLava(x-1, y);
+    SetLava(x+1, y);
+    SetLava(x, y-1);
+    SetLava(x, y+1);
+}
 
-    auto currC = GetBlock(x, y).type;
-    if (currC != prevC) return;
-    if (currC == newC) return;
-
-    // Replace the color at (x, y)
-    SetBlock(x, y, newC, GetBlock(x, y).timer);
+void Lava::Run() {
+    while (!q.empty()) {
+        auto curr = q.front();
+        q.pop();
+        SpreadLava(curr.x, curr.y);
+    }
+    
 }
 
 // Driver code
@@ -125,24 +142,31 @@ int main()
     cin >> N >> M;
     Lava l(N, M);
 
+    // Initialization
     for (int i = 0; i < N; i++) {
         string row;
         cin >> row;
         for (int j = 0; j < M; j++) {
             auto type = row[j];
-            l.SetBlock(i, j, type, 0);
+            l.SetBlock(i, j, type);
         }
 
     }
     for (int i = -1; i <= N; i++) {
-        l.SetBlock(i, -1, 'O', 0);
-        l.SetBlock(i, M, 'O', 0);
+        l.SetBlock(i, -1, 'O');
+        l.SetBlock(i, M, 'O');
     }
     for (int j = -1; j <= M; j++) {
-        l.SetBlock(-1, j, 'O', 0);
-        l.SetBlock(N, j, 'O', 0);
+        l.SetBlock(-1, j, 'O');
+        l.SetBlock(N, j, 'O');
     }
 
+
+    // while (true) {
+    //     l.timer++;
+    //     l.Run();
+    //     if (l.IsQEmpty()) break;
+    // }
 
     l.PrintRoom();
 
