@@ -11,12 +11,7 @@ using namespace std;
 
 bool debug = true;
 
-map<char, char> mp {
-    {'O', '='},
-    {'C', '.'},
-    {'L', 'L'},
-    {'B', 'B'},
-    {'D', 'D'},
+map<char, char> mp { {'O', '='}, {'C', '.'}, {'L', 'L'}, {'B', 'B'}, {'D', 'D'},
 };
 
 struct Block {
@@ -30,14 +25,62 @@ struct Position {
     int x, y;
 };
 
+// [Union-Find / Disjoint-Set – 陪你刷題 – haogroot's Blog](https://haogroot.com/2021/01/29/union_find-leetcode/)
+class UnionFind {
+    public:
+    UnionFind(int N, int M) {
+        count = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                parent.push_back(i*M + j);
+                count++;
+                rank.push_back(0);
+            }
+        }
+    }
+
+    int find(int i) { // path compression
+        if (i != parent[i]) {
+            parent[i] = find(parent[i]);
+        }
+        return parent[i];
+    }
+
+    void Union(int x, int y) { // union with rank
+        int root_x = find (x);
+        int root_y = find (y);
+        if (root_x != root_y) {
+            if (rank[root_x] > rank[root_y]) {
+                parent[root_y] = root_x;
+            } else if (rank[root_y] > rank[root_x]) {
+                parent[root_x] = root_y;
+            } else {
+                parent[root_y] = root_x;
+                rank[root_x] +=1;
+            }
+            count--;
+        }
+    }
+
+    int getCount() const {
+        return count;
+    }
+
+    private:
+    vector<int> parent;
+    vector<int> rank;
+    int count; // # of connected components
+};
+
 class Lava {
 private:
     const int N, M;
-    vector<vector<Block> > room;
+    vector<vector<Block>> room;
     queue<Position> q;
+    UnionFind uf;
 public:
     int timer_ = 0;
-    Lava(int N, int M): N(N), M(M) {
+    Lava(int N, int M): N(N), M(M), uf(N, M) {
         room.resize(N+2);
         for (int i = 0; i < N+2; i++) {
             room[i].resize(M+2);
@@ -95,7 +138,7 @@ public:
     void Run() {
         while (!q.empty()) {
             if (debug) cout << "q:" << q.size() << "\n";
-            // HOTFIX use debugger when using c++ -O2 optmiser might break this
+            // use debugger when using c++ -O2 optmiser might break this
             int x = q.front().x, y = q.front().y;
             auto curr = GetBlock(x, y);
 
@@ -108,7 +151,6 @@ public:
         }
     }
 };
-
 
 // Driver code
 int main()
