@@ -126,8 +126,13 @@ public:
         if (GetBlock(x, y).type != 'C') return;
         if (GetBlock(x, y).type == 'L') return;
         SetBlock(x, y, 'L', timer_ + 1);
-        PrintRoom();
+        if (debug) PrintRoom();
         q.push({x, y});
+
+        UnionLava(x, y, x-1, y);
+        UnionLava(x, y, x+1, y);
+        UnionLava(x, y, x, y-1);
+        UnionLava(x, y, x, y+1);
     }
 
     void SpreadLava(ll x, ll y) {
@@ -137,15 +142,20 @@ public:
         SetLava(x, y+1);
     }
 
+    ll xy2uf(ll x, ll y) {
+        return (x+1) * N + (y+1);
+    }
+    
     void UnionLava(ll x1, ll y1, ll x2, ll y2) {
+        if (GetBlock(x1, y1).type != GetBlock(x2, y2).type) return;
         uf.Union(
             xy2uf(x1, y1),
             xy2uf(x2, y2)
         );
     }
 
-    ll xy2uf(ll x, ll y) {
-        return (x+1) * N + (y+1);
+    bool IsConnected(ll x1, ll y1, ll x2, ll y2) {
+        return (uf.find(xy2uf(x1, y1)) == uf.find(xy2uf(x2, y2)));
     }
 
     void Run() {
@@ -213,6 +223,15 @@ int main()
     if (debug) {
         l.PrintRoom();
         cout << "\n";
+
+        cout << "2,0 2,1: " << l.IsConnected(2, 0, 2, 1) << "\n";
+        cout << "2,2 2,1: " << l.IsConnected(2, 2, 2, 1) << "\n";
+        cout << "2,2 2,3: " << l.IsConnected(2, 2, 2, 3) << "\n";
+        cout << "2,2 1,2: " << l.IsConnected(2, 2, 1, 2) << "\n";
     }
 
 }
+
+// TODO Union the lava
+// TODO Check if lava is connected
+// TODO Union the borders
