@@ -55,9 +55,6 @@ public:
     void SetBlock(int x, int y, char type) {
         if (!IsValidPosition(x, y)) return;
         room[x+1][y+1] = Block{x, y, type, timer};
-        if (type == 'L') {
-            SetLava(x, y);
-        }
     }
 
     void SetBorder(int x, int y) {
@@ -105,7 +102,7 @@ public:
     void SetLava(int x, int y) {
         if (!IsValidPosition(x, y)) return;
         if (GetBlock(x, y).type != 'C') return;
-        SetBlock(x, y, 'L'); // TODO LOOP?
+        SetBlock(x, y, 'L');
         q.push(GetBlock(x, y));
     }
 
@@ -143,7 +140,12 @@ int main()
         cin >> row;
         for (int j = 0; j < M; j++) {
             auto type = row[j];
-            l.SetBlock(i, j, type);
+            if (type == 'L') {
+                l.SetBlock(i, j, 'C'); // Lava must set on 'C'
+                l.SetLava(i, j);
+            } else {
+                l.SetBlock(i, j, type);
+            }
         }
     }
 
