@@ -53,11 +53,15 @@ public:
     }
 
     void SetBlock(int x, int y, char type) {
-        // if (!IsValidPosition(x, y)) return; // DOING
+        if (!IsValidPosition(x, y)) return;
         room[x+1][y+1] = Block{x, y, type, timer};
         if (type == 'L') {
             SetLava(x, y);
         }
+    }
+
+    void SetBorder(int x, int y) {
+        room[x+1][y+1] = Block{x, y, 'O', 0};
     }
 
     void PrintRoom() {
@@ -141,15 +145,15 @@ int main()
             auto type = row[j];
             l.SetBlock(i, j, type);
         }
-
     }
+
     for (int i = -1; i <= N; i++) {
-        l.SetBlock(i, -1, 'O');
-        l.SetBlock(i, M, 'O');
+        l.SetBorder(i, -1);
+        l.SetBorder(i, M);
     }
     for (int j = -1; j <= M; j++) {
-        l.SetBlock(-1, j, 'O');
-        l.SetBlock(N, j, 'O');
+        l.SetBorder(-1, j);
+        l.SetBorder(N, j);
     }
 
 
