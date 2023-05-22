@@ -25,3 +25,15 @@
 
 - [Flood Fill Algorithm - GeeksforGeeks](https://www.geeksforgeeks.org/flood-fill-algorithm/)
 - [[演算法] 並查集 (Union-find Algorithm) - iT 邦幫忙::一起幫忙解決難題，拯救 IT 人的一天](https://ithelp.ithome.com.tw/articles/10209278)
+
+One day, Jason has nightmare that he wakes up and finds part of bedroom has been burned out with lava. Fortunately, due to the slow flow of lava, Jason has some time to escape from bed to door.
+
+There are five types of floor in Jason's bedroom, sizing N*M. Moreover, Jason wants to know that how long he can escape from bedroom.
+
+type L: Lava, and there may be a lot of lava. Lava will flow out 1 unit per second(the available direction are up, left, right, and down)
+type O: Obstalcle, where lava cannot flow, and Jason can not go through.
+type C: Common floor, where lava can flow.
+type B: Bed, where lava cannot flow, and exists only one time.
+type D: Door, where lava cannot flow, and exists only one time.
+
+Please tell Jason how much time he can escape bedroom from B to D safely.

@@ -6,6 +6,7 @@
 #include <sstream>
 #include <queue>
 #include <map>
+#include <cstring>
 
 #define ll long long
 
@@ -15,6 +16,7 @@ bool debug = true;
 
 map<char, char> mp { {'O', '='}, {'C', '.'}, {'L', 'L'}, {'B', 'B'}, {'D', 'D'},
 };
+
 
 struct Block {
     ll x;
@@ -81,6 +83,7 @@ private:
     queue<Position> q;
     UnionFind uf;
 public:
+    Block B, D;
     ll timer_ = 0;
     Lava(ll N, ll M): N(N), M(M), uf(N, M) {
         room.resize(N+2);
@@ -126,7 +129,7 @@ public:
         if (GetBlock(x, y).type != 'C') return;
         if (GetBlock(x, y).type == 'L') return;
         SetBlock(x, y, 'L', timer_ + 1);
-        if (debug) PrintRoom();
+        // if (debug) PrintRoom();
         q.push({x, y});
 
         UnionLava(x, y, x-1, y);
@@ -160,26 +163,74 @@ public:
 
     void Run() {
         while (!q.empty()) {
-            if (debug) cout << "q:" << q.size() << "\n";
+            // if (debug) cout << "q:" << q.size() << "\n";
             // use debugger when using c++ -O2 optmiser might break this
             ll x = q.front().x, y = q.front().y;
             auto curr = GetBlock(x, y);
 
-            if (debug) cout << curr.x << " " << curr.y << " "  << curr.type << " " << curr.timer << "\n";
-            if (debug) cout << "timer_:" << timer_ << "\n";
+            // if (debug) cout << curr.x << " " << curr.y << " "  << curr.type << " " << curr.timer << "\n";
+            // if (debug) cout << "timer_:" << timer_ << "\n";
             if (curr.timer > timer_) break;
             q.pop();
 
             SpreadLava(curr.x, curr.y);
         }
     }
+
+    bool BfsEscape(){ // DOING
+        queue<Block> Q;
+        bool v[N][M]; // visited
+        ll d[N][M]; // distance
+        memset(v, 0, sizeof(v));
+        memset(d, 0, sizeof(d));
+        int dx[4] = {0, 0, -1, 1};
+        int dy[4] = {1, -1, 0, 0};
+        Q.push(B);
+        v[B.x][B.y] = true;
+        while (!Q.empty()){
+            auto cell = Q.front();
+            Q.pop();
+            if (debug) {
+                for (ll i = 0; i < N; i++) {
+                    for (ll j = 0; j < M; j++) {
+                        cout << d[i][j];
+                    }
+                    cout << "\n";
+                }
+                cout << "\n";
+            }
+            if (debug) cout << "cell: (" << cell.x << "," << cell.y << ")\n";
+            for (int i=0; i<4; ++i){
+                int nx = cell.x + dx[i], ny = cell.y + dy[i];
+                if (
+                    IsValidPosition(nx, ny) 
+                    && !v[nx][ny] 
+                    && (GetBlock(nx, ny).type == 'C'
+                        || GetBlock(nx, ny).type == 'D')
+                    // && d[cell.x][cell.y] + 1 < d[nx][ny]
+                    ) {
+                    if (debug) cout << "(" << nx << "," << ny << ") ";
+
+                    v[nx][ny] = true;
+                    d[nx][ny] = d[cell.x][cell.y] + 1;
+                    if(GetBlock(nx, ny).type == 'D') return true;
+                    Q.push(GetBlock(nx, ny));
+                }
+            }
+            if (debug) cout << "\n";
+
+        }
+        return false;
+    }
 };
 
 // Driver code
 int main()
 {
-    // debug = false;
-    stringstream cin("3 4\nCCCD\nCCCC\nBCLC");
+    debug = false;
+    // stringstream cin("3 4\nCCCD\nCCCC\nBCLC");
+    // stringstream cin("4 4\nCCCL\nCCCC\nCCCC\nBCDC");
+    // stringstream cin("2 4\nCCCD\nBCLC");
 
     ll N, M;
     cin >> N >> M;
@@ -196,6 +247,8 @@ int main()
                 l.SetLava(i, j);
             } else {
                 l.SetBlock(i, j, type, 0);
+                if (type == 'B') l.B = l.GetBlock(i, j);
+                if (type == 'D') l.D = l.GetBlock(i, j);
             }
         }
     }
@@ -217,21 +270,26 @@ int main()
     while (true) {
         l.timer_++;
         l.Run();
-        if (l.IsQEmpty()) break;
+        if (l.IsQEmpty()) {
+            if (debug) cout << l.timer_ << "\n";
+            if (debug) l.PrintRoom();
+            if (debug) cout << "~~~~~~~~~~~~\n";
+            if (!l.BfsEscape()) {
+                l.timer_--;
+                break;
+            }
+        }
     }
 
-    if (debug) {
-        l.PrintRoom();
-        cout << "\n";
-
-        cout << "2,0 2,1: " << l.IsConnected(2, 0, 2, 1) << "\n";
-        cout << "2,2 2,1: " << l.IsConnected(2, 2, 2, 1) << "\n";
-        cout << "2,2 2,3: " << l.IsConnected(2, 2, 2, 3) << "\n";
-        cout << "2,2 1,2: " << l.IsConnected(2, 2, 1, 2) << "\n";
+    if (l.timer_ == 0) {
+        cout << -1 << "\n";
+        return 0;
     }
 
+    cout << l.timer_ << "\n";
+    return 0;
 }
 
-// TODO Union the lava
-// TODO Check if lava is connected
-// TODO Union the borders
+// TODO Union the borders?
+
+// TODO BFS to connect the B and D?
