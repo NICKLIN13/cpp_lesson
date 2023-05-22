@@ -37,3 +37,71 @@ type B: Bed, where lava cannot flow, and exists only one time.
 type D: Door, where lava cannot flow, and exists only one time.
 
 Please tell Jason how much time he can escape bedroom from B to D safely.
+
+Input:
+
+4 5
+CCCCC
+CCCOC
+CCCOC
+BCCDL
+
+Output:
+7
+
+Case 1:
+10 10
+CCCCCCCCCD
+CCCCCCCCCC
+CCCCCCCCCC
+CCCCCCCCCC
+CCCCCCCCCC
+CCCCCCCCCC
+CCCCCCCCCC
+CCCCCCCCCC
+CCCCCCCCCC
+CBCCCCCCLC
+
+Output 1:
+8
+
+Case 2:
+10 10
+LCCCCCCCCD
+CCCCCCCCCC
+CCCCCCCCCC
+CCCCCCCCCC
+CCCCCCCCCC
+CCCCCLCCCC
+CCCCCCCCCC
+CCCCCCCCCC
+CCCCCCCCCC
+CBCCCCCCLC
+
+Output 2:
+3
+
+Case 3:
+8 8
+LCCCCCCD
+CCCCCCCC
+CCCCCCCC
+CCCCCCCC
+CCCCCCCC
+CCCCCCCC
+CCCCCCCC
+CBCCCCLC
+
+Output 3:
+5
+
+Input：
+6 4
+BCCL
+CCCL
+CDOL
+CCCC
+COLC
+CLCL
+Output：
+2

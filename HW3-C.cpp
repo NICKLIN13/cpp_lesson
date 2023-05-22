@@ -28,8 +28,8 @@ struct Block {
 struct Position {
     ll x, y;
 };
-
 // [Union-Find / Disjoint-Set – 陪你刷題 – haogroot's Blog](https://haogroot.com/2021/01/29/union_find-leetcode/)
+/*
 class UnionFind {
     public:
     UnionFind(ll N, ll M) {
@@ -75,17 +75,22 @@ class UnionFind {
     vector<ll> rank;
     ll count; // # of connected components
 };
+*/
 
 class Lava {
 private:
     const ll N, M;
     vector<vector<Block>> room;
     queue<Position> q;
-    UnionFind uf;
+    // UnionFind uf;
 public:
     Block B, D;
     ll timer_ = 0;
-    Lava(ll N, ll M): N(N), M(M), uf(N, M) {
+    Lava(ll N, ll M)
+    : N(N)
+    , M(M)
+    // , uf(N, M) 
+    {
         room.resize(N+2);
         for (ll i = 0; i < N+2; i++) {
             room[i].resize(M+2);
@@ -132,10 +137,10 @@ public:
         // if (debug) PrintRoom();
         q.push({x, y});
 
-        UnionLava(x, y, x-1, y);
-        UnionLava(x, y, x+1, y);
-        UnionLava(x, y, x, y-1);
-        UnionLava(x, y, x, y+1);
+        // UnionLava(x, y, x-1, y);
+        // UnionLava(x, y, x+1, y);
+        // UnionLava(x, y, x, y-1);
+        // UnionLava(x, y, x, y+1);
     }
 
     void SpreadLava(ll x, ll y) {
@@ -149,17 +154,17 @@ public:
         return (x+1) * N + (y+1);
     }
     
-    void UnionLava(ll x1, ll y1, ll x2, ll y2) {
-        if (GetBlock(x1, y1).type != GetBlock(x2, y2).type) return;
-        uf.Union(
-            xy2uf(x1, y1),
-            xy2uf(x2, y2)
-        );
-    }
+    // void UnionLava(ll x1, ll y1, ll x2, ll y2) {
+    //     if (GetBlock(x1, y1).type != GetBlock(x2, y2).type) return;
+    //     uf.Union(
+    //         xy2uf(x1, y1),
+    //         xy2uf(x2, y2)
+    //     );
+    // }
 
-    bool IsConnected(ll x1, ll y1, ll x2, ll y2) {
-        return (uf.find(xy2uf(x1, y1)) == uf.find(xy2uf(x2, y2)));
-    }
+    // bool IsConnected(ll x1, ll y1, ll x2, ll y2) {
+    //     return (uf.find(xy2uf(x1, y1)) == uf.find(xy2uf(x2, y2)));
+    // }
 
     void Run() {
         while (!q.empty()) {
@@ -228,9 +233,17 @@ public:
 int main()
 {
     debug = false;
-    // stringstream cin("3 4\nCCCD\nCCCC\nBCLC");
-    // stringstream cin("4 4\nCCCL\nCCCC\nCCCC\nBCDC");
-    // stringstream cin("2 4\nCCCD\nBCLC");
+    if (debug) {
+        // stringstream cin("3 4\nCCCD\nCCCC\nBCLC"); // 1
+        // stringstream cin("4 4\nCCCL\nCCCC\nCCCC\nBCDC"); // 4
+        // stringstream cin("2 4\nCCCD\nBCLC"); // -1
+        // stringstream cin("4 5\nCCCCC\nCCCOC\nCCCOC\nBCCDL"); // 7
+        // stringstream cin("4 5\nCCCCC\nCCCOC\nCCCOC\nBCCDL"); // 7
+        // stringstream cin("10 10\nCCCCCCCCCD\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCBCCCCCCLC"); // 8
+        // stringstream cin("10 10\nLCCCCCCCCD\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCLCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCBCCCCCCLC"); // 3
+        // stringstream cin("8 8\nLCCCCCCD\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCBCCCCLC"); // 5
+        // stringstream cin("6 4\nBCCL\nCCCL\nCDOL\nCCCC\nCOLC\nCLCL"); // 2
+    }
 
     ll N, M;
     cin >> N >> M;
@@ -243,7 +256,7 @@ int main()
         for (ll j = 0; j < M; j++) {
             auto type = row[j];
             if (type == 'L') {
-                l.SetBlock(i, j, 'C', 0); // Lava must set on 'C'
+                l.SetBlock(i, j, 'C', 0); // Lava must be set on 'C'
                 l.SetLava(i, j);
             } else {
                 l.SetBlock(i, j, type, 0);
