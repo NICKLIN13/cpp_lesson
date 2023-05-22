@@ -32,7 +32,7 @@ struct Position {
     ll x, y;
 };
 // [Union-Find / Disjoint-Set – 陪你刷題 – haogroot's Blog](https://haogroot.com/2021/01/29/union_find-leetcode/)
-/*
+
 class UnionFind {
     public:
     UnionFind(ll N, ll M) {
@@ -78,21 +78,21 @@ class UnionFind {
     vector<ll> rank;
     ll count; // # of connected components
 };
-*/
+
 
 class Lava {
 private:
     const ll N, M;
     vector<vector<Block>> room;
     queue<Position> q;
-    // UnionFind uf;
+    UnionFind uf;
 public:
     Block B, D;
     ll timer_ = 0;
     Lava(ll N, ll M)
     : N(N)
     , M(M)
-    // , uf(N, M) 
+    , uf(N, M) 
     {
         room.resize(N+2);
         for (ll i = 0; i < N+2; i++) {
@@ -117,6 +117,13 @@ public:
     void SetBlock(ll x, ll y, char type, ll timer) {
         if (!IsValidPosition(x, y)) return;
         room[x+1][y+1] = Block{x, y, type, timer};
+
+        if (type == 'B' || type == 'C') {
+            for (int i = 0; i < 4; i++) {
+                int nx = x+dx[i], ny = y+dy[i];
+                UnionRoad(x, y, nx, ny);
+            }
+        }
     }
 
     void SetBorder(ll x, ll y) {
@@ -139,11 +146,6 @@ public:
         SetBlock(x, y, 'L', timer_ + 1);
         // if (debug) PrintRoom();
         q.push({x, y});
-
-        // for (int i = 0; i < 4; i++) {
-        //     int nx = x+dx[i], ny = y+dy[i];
-        //     UnionLava(x, y, nx, ny);
-        // }
     }
 
     void SpreadLava(ll x, ll y) {
@@ -157,17 +159,19 @@ public:
         return (x+1) * N + (y+1);
     }
     
-    // void UnionLava(ll x1, ll y1, ll x2, ll y2) {
-    //     if (GetBlock(x1, y1).type != GetBlock(x2, y2).type) return;
-    //     uf.Union(
-    //         xy2uf(x1, y1),
-    //         xy2uf(x2, y2)
-    //     );
-    // }
+    void UnionRoad(ll x1, ll y1, ll x2, ll y2) {
+        if (!(GetBlock(x1, y1).type == 'C' 
+            || GetBlock(x2, y2).type == 'D')) return;
 
-    // bool IsConnected(ll x1, ll y1, ll x2, ll y2) {
-    //     return (uf.find(xy2uf(x1, y1)) == uf.find(xy2uf(x2, y2)));
-    // }
+        uf.Union(
+            xy2uf(x1, y1),
+            xy2uf(x2, y2)
+        );
+    }
+
+    bool IsConnected(ll x1, ll y1, ll x2, ll y2) {
+        return (uf.find(xy2uf(x1, y1)) == uf.find(xy2uf(x2, y2)));
+    }
 
     void Run() {
         while (!q.empty()) {
@@ -185,6 +189,12 @@ public:
         }
     }
 
+    bool UfEscape() {
+        // TODO Duplicate a Lava?
+        return IsConnected(B.x, B.y, D.x, D.y);
+    }
+    
+    /*
     bool BfsEscape(){
         queue<Block> Q;
         bool v[N][M]; // visited
@@ -230,19 +240,20 @@ public:
         }
         return false;
     }
+    */
 };
 
 // Driver code
 int main()
 {
-    debug = false;
+    // debug = false;
 
-    // stringstream cin("3 4\nCCCD\nCCCC\nBCLC"); // 1
+    stringstream cin("3 4\nCCCD\nCCCC\nBCLC"); // 1
     // stringstream cin("4 4\nCCCL\nCCCC\nCCCC\nBCDC"); // 4
     // stringstream cin("2 4\nCCCD\nBCLC"); // -1
     // stringstream cin("4 5\nCCCCC\nCCCOC\nCCCOC\nBCCDL"); // 7
     // stringstream cin("4 5\nCCCCC\nCCCOC\nCCCOC\nBCCDL"); // 7
-    stringstream cin("10 10\nCCCCCCCCCD\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCBCCCCCCLC"); // 8
+    // stringstream cin("10 10\nCCCCCCCCCD\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCBCCCCCCLC"); // 8
     // stringstream cin("10 10\nLCCCCCCCCD\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCLCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCBCCCCCCLC"); // 3
     // stringstream cin("8 8\nLCCCCCCD\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCBCCCCLC"); // 5
     // stringstream cin("6 4\nBCCL\nCCCL\nCDOL\nCCCC\nCOLC\nCLCL"); // 2
@@ -290,7 +301,7 @@ int main()
             if (debug) cout << l.timer_ << "\n";
             if (debug) l.PrintRoom();
             if (debug) cout << "~~~~~~~~~~~~\n";
-            if (!l.BfsEscape()) {
+            if (!l.UfEscape()) {
                 l.timer_--;
                 break;
             }
