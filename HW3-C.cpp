@@ -18,6 +18,9 @@ map<char, char> mp { {'O', '='}, {'C', '.'}, {'L', 'L'}, {'B', 'B'}, {'D', 'D'},
 };
 
 
+int dx[4] = {0, 0, -1, 1};
+int dy[4] = {1, -1, 0, 0};
+
 struct Block {
     ll x;
     ll y;
@@ -137,17 +140,17 @@ public:
         // if (debug) PrintRoom();
         q.push({x, y});
 
-        // UnionLava(x, y, x-1, y);
-        // UnionLava(x, y, x+1, y);
-        // UnionLava(x, y, x, y-1);
-        // UnionLava(x, y, x, y+1);
+        // for (int i = 0; i < 4; i++) {
+        //     int nx = x+dx[i], ny = y+dy[i];
+        //     UnionLava(x, y, nx, ny);
+        // }
     }
 
     void SpreadLava(ll x, ll y) {
-        SetLava(x-1, y);
-        SetLava(x+1, y);
-        SetLava(x, y-1);
-        SetLava(x, y+1);
+        for (int i = 0; i < 4; i++) {
+            int nx = x+dx[i], ny = y+dy[i];
+            SetLava(nx, ny);
+        }
     }
 
     ll xy2uf(ll x, ll y) {
@@ -182,7 +185,7 @@ public:
         }
     }
 
-    bool BfsEscape(){ // DOING
+    bool BfsEscape(){
         queue<Block> Q;
         bool v[N][M]; // visited
         ll d[N][M]; // distance
@@ -233,17 +236,17 @@ public:
 int main()
 {
     debug = false;
-    if (debug) {
-        // stringstream cin("3 4\nCCCD\nCCCC\nBCLC"); // 1
-        // stringstream cin("4 4\nCCCL\nCCCC\nCCCC\nBCDC"); // 4
-        // stringstream cin("2 4\nCCCD\nBCLC"); // -1
-        // stringstream cin("4 5\nCCCCC\nCCCOC\nCCCOC\nBCCDL"); // 7
-        // stringstream cin("4 5\nCCCCC\nCCCOC\nCCCOC\nBCCDL"); // 7
-        // stringstream cin("10 10\nCCCCCCCCCD\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCBCCCCCCLC"); // 8
-        // stringstream cin("10 10\nLCCCCCCCCD\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCLCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCBCCCCCCLC"); // 3
-        // stringstream cin("8 8\nLCCCCCCD\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCBCCCCLC"); // 5
-        // stringstream cin("6 4\nBCCL\nCCCL\nCDOL\nCCCC\nCOLC\nCLCL"); // 2
-    }
+
+    // stringstream cin("3 4\nCCCD\nCCCC\nBCLC"); // 1
+    // stringstream cin("4 4\nCCCL\nCCCC\nCCCC\nBCDC"); // 4
+    // stringstream cin("2 4\nCCCD\nBCLC"); // -1
+    // stringstream cin("4 5\nCCCCC\nCCCOC\nCCCOC\nBCCDL"); // 7
+    // stringstream cin("4 5\nCCCCC\nCCCOC\nCCCOC\nBCCDL"); // 7
+    stringstream cin("10 10\nCCCCCCCCCD\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCBCCCCCCLC"); // 8
+    // stringstream cin("10 10\nLCCCCCCCCD\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCLCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCCCCCCCCCC\nCBCCCCCCLC"); // 3
+    // stringstream cin("8 8\nLCCCCCCD\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCCCCCCCC\nCBCCCCLC"); // 5
+    // stringstream cin("6 4\nBCCL\nCCCL\nCDOL\nCCCC\nCOLC\nCLCL"); // 2
+
 
     ll N, M;
     cin >> N >> M;
@@ -302,7 +305,3 @@ int main()
     cout << l.timer_ << "\n";
     return 0;
 }
-
-// TODO Union the borders?
-
-// TODO BFS to connect the B and D?
