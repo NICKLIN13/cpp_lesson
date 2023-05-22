@@ -7,6 +7,7 @@
 #include <queue>
 #include <map>
 #include <cstring>
+#include <set>
 
 #define ll long long
 
@@ -17,9 +18,9 @@ bool debug = true;
 map<char, char> mp { {'O', '='}, {'C', '.'}, {'L', 'L'}, {'B', 'B'}, {'D', 'D'},
 };
 
-
-int dx[4] = {0, 0, -1, 1};
-int dy[4] = {1, -1, 0, 0};
+#define DIRECTIONS 4
+int dx[DIRECTIONS] = {0, 0, -1, 1};
+int dy[DIRECTIONS] = {1, -1, 0, 0};
 
 struct Block {
     ll x;
@@ -35,7 +36,8 @@ struct Position {
 
 class UnionFind {
     public:
-    UnionFind(ll N, ll M) {
+    ll N, M;
+    UnionFind(ll N, ll M): N(N), M(M) {
         count = 0;
         for (ll i = 0; i < N; i++) {
             for (ll j = 0; j < M; j++) {
@@ -73,6 +75,16 @@ class UnionFind {
         return count;
     }
 
+    void print() {
+        for (ll i = 0; i < N; i++) {
+            for (ll j = 0; j < M; j++) {
+                cout << parent[i*M + j];
+            }
+            cout << "\n";
+        }
+        cout << "\n";
+    }
+
     private:
     vector<ll> parent;
     vector<ll> rank;
@@ -94,9 +106,9 @@ public:
     , M(M)
     , uf(N, M) 
     {
-        room.resize(N+2);
-        for (ll i = 0; i < N+2; i++) {
-            room[i].resize(M+2);
+        room.resize(N);
+        for (ll i = 0; i < N; i++) {
+            room[i].resize(M);
         }
     }
 
@@ -111,24 +123,15 @@ public:
     }
 
     Block GetBlock(ll x, ll y) {
-        return room[x+1][y+1];
+        return room[x][y];
     }
 
     void SetBlock(ll x, ll y, char type, ll timer) {
         if (!IsValidPosition(x, y)) return;
-        room[x+1][y+1] = Block{x, y, type, timer};
-
-        if (type == 'B' || type == 'C') {
-            for (int i = 0; i < 4; i++) {
-                int nx = x+dx[i], ny = y+dy[i];
-                UnionRoad(x, y, nx, ny);
-            }
-        }
+        room[x][y] = Block{x, y, type, timer};
     }
 
-    void SetBorder(ll x, ll y) {
-        room[x+1][y+1] = Block{x, y, 'O', 0};
-    }
+
 
     void PrintRoom() {
         for (auto row: room) {
@@ -149,28 +152,29 @@ public:
     }
 
     void SpreadLava(ll x, ll y) {
-        for (int i = 0; i < 4; i++) {
-            int nx = x+dx[i], ny = y+dy[i];
+        for (ll i = 0; i < DIRECTIONS; i++) {
+            ll nx = x+dx[i], ny = y+dy[i];
             SetLava(nx, ny);
         }
     }
 
     ll xy2uf(ll x, ll y) {
-        return (x+1) * N + (y+1);
-    }
-    
-    void UnionRoad(ll x1, ll y1, ll x2, ll y2) {
-        if (!(GetBlock(x1, y1).type == 'C' 
-            || GetBlock(x2, y2).type == 'D')) return;
-
-        uf.Union(
-            xy2uf(x1, y1),
-            xy2uf(x2, y2)
-        );
+        return x*M + y;
     }
 
-    bool IsConnected(ll x1, ll y1, ll x2, ll y2) {
-        return (uf.find(xy2uf(x1, y1)) == uf.find(xy2uf(x2, y2)));
+    void UnionRoad(UnionFind &temp, ll x1, ll y1, ll x2, ll y2) {
+        if (!IsValidPosition(x2, y2)) return;
+        char type = GetBlock(x2, y2).type;
+        if (type == 'C' || type == 'B' || type == 'D') {
+            temp.Union(
+                xy2uf(x1, y1),
+                xy2uf(x2, y2)
+            );
+        }
+    }
+
+    bool IsConnected(UnionFind &temp, ll x1, ll y1, ll x2, ll y2) {
+        return (temp.find(xy2uf(x1, y1)) == temp.find(xy2uf(x2, y2)));
     }
 
     void Run() {
@@ -189,9 +193,28 @@ public:
         }
     }
 
-    bool UfEscape() {
-        // TODO Duplicate a Lava?
-        return IsConnected(B.x, B.y, D.x, D.y);
+    bool UfEscape() { // DOING
+        // TODO Duplicate a uf?
+        UnionFind temp(uf);
+        ll Bx, By, Dx, Dy;
+        for (ll i = 0; i < N; i++) {
+            for (ll j = 0; j < M; j++) {
+                auto cell = GetBlock(i, j);
+                char type = cell.type;
+                if (type == 'C' || type == 'B' || type == 'D') {
+                    ll x = cell.x, y = cell.y;
+                    if (type == 'B') {Bx = x; By = y;}
+                    if (type == 'D') {Dx = x; Dy = y;}
+
+                    for (ll k = 0; k < DIRECTIONS; k++) {
+                        ll nx = x+dx[k], ny = y+dy[k];
+                        UnionRoad(temp, x, y, nx, ny);
+                    }
+                }
+            }
+        }
+        if (debug) temp.print();
+        return IsConnected(temp, Bx, By, Dx, Dy);
     }
     
     /*
@@ -218,7 +241,7 @@ public:
                 cout << "\n";
             }
             if (debug) cout << "cell: (" << cell.x << "," << cell.y << ")\n";
-            for (int i=0; i<4; ++i){
+            for (int i=0; i < DIRECTIONS; ++i){
                 int nx = cell.x + dx[i], ny = cell.y + dy[i];
                 if (
                     IsValidPosition(nx, ny) 
@@ -246,9 +269,12 @@ public:
 // Driver code
 int main()
 {
-    // debug = false;
+    debug = false;
 
-    stringstream cin("3 4\nCCCD\nCCCC\nBCLC"); // 1
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    // stringstream cin("3 4\nCCCD\nCCCC\nBCLC"); // 1
     // stringstream cin("4 4\nCCCL\nCCCC\nCCCC\nBCDC"); // 4
     // stringstream cin("2 4\nCCCD\nBCLC"); // -1
     // stringstream cin("4 5\nCCCCC\nCCCOC\nCCCOC\nBCCDL"); // 7
@@ -280,14 +306,14 @@ int main()
         }
     }
 
-    for (ll i = -1; i <= N; i++) {
-        l.SetBorder(i, -1);
-        l.SetBorder(i, M);
-    }
-    for (ll j = -1; j <= M; j++) {
-        l.SetBorder(-1, j);
-        l.SetBorder(N, j);
-    }
+    // for (ll i = -1; i <= N; i++) {
+    //     l.SetBorder(i, -1);
+    //     l.SetBorder(i, M);
+    // }
+    // for (ll j = -1; j <= M; j++) {
+    //     l.SetBorder(-1, j);
+    //     l.SetBorder(N, j);
+    // }
 
     if (debug) {
         l.PrintRoom();
