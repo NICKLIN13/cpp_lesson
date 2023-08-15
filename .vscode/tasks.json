@@ -5,9 +5,10 @@
             "label": "C++17: g++ build active file",
             "command": "g++",
             "args": [
-                // "-O2", // Causing errors when debugging
-                "-O0",
+                "-O2", // Causing errors when debugging
+                // "-O0",
                 "-w",
+                // "-Wall", "-Wextra",
                 "-fmax-errors=3",
                 "-std=c++17",
                 "-g",
