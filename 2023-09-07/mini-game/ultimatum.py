@@ -22,6 +22,9 @@
 
 import random
 
+class GameError(Exception):
+  pass
+
 class Game:
   def __init__(self, num: int) -> None:
     self.num = num
@@ -32,22 +35,21 @@ class Game:
     raw_str = input("Please enter your guess(1~20): ")
 
     if raw_str == "":
-      print("empty string!")
-      return None # try except throw
-    
+      raise ValueError("empty string!")
+
     guess = int(raw_str)
 
     if guess < 0 or guess > 20:
-      print("out of range")
-      return None
-    
+      raise ValueError("out of range")
+
     return guess
   
   def run(self) -> None:
     while True:
-      guess = self.get_guess()
-
-      if guess is None:
+      try: # 把可能會出錯的情況抓出來，試試看他有沒有錯
+        guess = self.get_guess()
+      except ValueError as e: # 如果發生了預期的錯誤，就執行裡面的內容
+        print(e)
         continue
 
       if guess == self.ANS:
