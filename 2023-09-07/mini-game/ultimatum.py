@@ -23,42 +23,59 @@
 import random
 
 class GameError(Exception):
-  pass
+    pass
 
 class Game:
-  def __init__(self, num: int) -> None:
-    self.num = num
-    print(f"Game {self.num} start!")
-    self.ANS = random.randint(1, 20)
+    def __init__(self, num: int) -> None:
+        self.num = num
+        print(f"Game {self.num} start!")
+        self.LOWER_BOUND = 1
+        self.UPPER_BOUND = 20
+        self.ANS = random.randint(self.LOWER_BOUND, self.UPPER_BOUND)
 
-  def get_guess(self) -> int:
-    raw_str = input("Please enter your guess(1~20): ")
+    def get_guess(self) -> int: 
+        """get input and check it"""
 
-    if raw_str == "":
-      raise ValueError("empty string!")
+        raw_str = input("Please enter your guess(1~20): ")
 
-    guess = int(raw_str)
+        if raw_str == "":
+            raise ValueError("empty string!")
 
-    if guess < 0 or guess > 20:
-      raise ValueError("out of range")
+        guess = int(raw_str)
 
-    return guess
-  
-  def run(self) -> None:
-    while True:
-      try: # 把可能會出錯的情況抓出來，試試看他有沒有錯
-        guess = self.get_guess()
-      except ValueError as e: # 如果發生了預期的錯誤，就執行裡面的內容
-        print(e)
-        continue
+        if guess < self.LOWER_BOUND or guess > self.UPPER_BOUND: # no magic number!
+            raise ValueError("out of range")
 
-      if guess == self.ANS:
-        print('Good job! ⸜(⸝⸝⸝´꒳`⸝⸝⸝)⸝')
-        break
-      elif guess > self.ANS:
-        print('Too big (っಠ‿ಠ)っ')
-      elif guess < self.ANS:
-        print('Too small \(￣ﾊ￣)')
+        return guess
+
+    def check_ans(self, guess: int):
+        result = ""
+
+        self.msg_correct = 'Good job! ⸜(⸝⸝⸝´꒳`⸝⸝⸝)⸝'
+        if guess == self.ANS:
+            result = self.msg_correct
+        elif guess > self.ANS:
+            result = 'Too big (っಠ‿ಠ)っ'
+        elif guess < self.ANS:
+            result = 'Too small \(￣ﾊ￣)'
+
+        print(result)
+        return result
+
+
+    def run(self) -> None:
+        while True:
+            try: # 把可能會出錯的情況抓出來，試試看他有沒有錯
+                guess = self.get_guess()
+            except ValueError as e: # 如果發生了預期的錯誤，就執行裡面的內容
+                print(e)
+                continue
+
+            result = self.check_ans(guess)
+
+            if result == self.msg_correct:
+                break
+
 
 
 
