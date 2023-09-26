@@ -45,6 +45,27 @@ class Game:
   
   def run(self) -> None:
     while True:
-      pass # place holder
+      guess = self.get_guess()
+
+      if guess is None:
+        continue
+
+      if guess == self.ANS:
+        print('Good job! ⸜(⸝⸝⸝´꒳`⸝⸝⸝)⸝')
+        break
+      elif guess > self.ANS:
+        print('Too big (っಠ‿ಠ)っ')
+      elif guess < self.ANS:
+        print('Too small \(￣ﾊ￣)')
+
+
+
+
+
+
+
+
+
 
 newgame = Game(1) # initiate
+newgame.run()
