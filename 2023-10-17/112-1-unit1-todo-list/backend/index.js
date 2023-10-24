@@ -17,7 +17,11 @@ app.use(cors());
 app.use("/api/todos", todoRouter);
 
 app.get("/heartbeat", (_, res) => {
-  return res.send({ message: "Hello World!" });
+  return res.send({ message: "Hello Nick and Andrew!" });
+});
+
+app.get("/hello", (_, res) => {
+  return res.send({ message: "Hello~~~!" });
 });
 
 const port = process.env.PORT || 8000;
