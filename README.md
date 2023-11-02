@@ -2,6 +2,8 @@
 
 This is a repo for class notes.
 
+Hello
+
 ## 2023-10-24 22:55:46
 
 ### 今日進度
