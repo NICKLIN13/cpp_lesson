@@ -5,20 +5,16 @@
 
     <head>
         <link rel="stylesheet" href="style.css" />
-        <script defer src="index.js"></script>
+        <script defer src="script.js"></script>
         <title>Bookkeeper</title>
     </head>
 
     <body>
-        <h1>Hello world!</h1>
-        <script>
-            let x = 0;
-            function countUp() {
-                x++;
-                document.getElementById("count").innerHTML = x;
-            }
-        </script>
-        <button id="count" onclick="countUp()">Click me</button>
+        <h1 id ="heading">Hello world!</h1>
+        <div>
+            <button id="change-heading"tabindex="3">execute</button>
+            <input type="text" id="heading-input" placeholder="new heading" tabindex="1" />
+        </div>
 
     </body>
 

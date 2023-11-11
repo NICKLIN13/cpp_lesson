@@ -1,6 +1,6 @@
 /* global axios */
 const itemTemplate = document.querySelector("#todo-item-template");
-const todoList = document.querySelector("#todos");
+const todoList = document.querySelector("#todos");  // TODO
 
 const instance = axios.create({
   baseURL: "http://localhost:8000/api",
@@ -61,7 +61,7 @@ function createTodoElement(todo) {
   const title = item.querySelector("p.todo-title");
   title.innerText = todo.title;
   const description = item.querySelector("p.todo-description");
-  description.innerText = todo.description;
+  description.innerText = todo.description; // TODO
   const deleteButton = item.querySelector("button.delete-todo");
   deleteButton.dataset.id = todo.id;
   deleteButton.addEventListener("click", () => {
