@@ -1,4 +1,3 @@
-
 function addEventListener() {
     const headingInput = document.getElementById("heading-input");
     const executeButton = document.getElementById("change-heading");
