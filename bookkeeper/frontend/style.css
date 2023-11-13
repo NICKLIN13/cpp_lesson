@@ -34,3 +34,10 @@ button#change-heading {
     border-radius: 0.5rem;
     padding: 0 0.5rem;
 }
+
+button#counterbtn {
+    height: var(--todo-input-height);
+    font-size: var(--todo-input-font-size);
+    border-radius: 0.5rem;
+    padding: 0 0.5rem;
+}
