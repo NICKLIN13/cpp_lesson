@@ -157,3 +157,6 @@ Next time you can just have to run `yarn dev` to start the server. Step 1-4 are 
 
 - [ ] Add a title/heading
 - [ ] Use a button to change the title/heading
+
+
+## TODO Add check points to have solid understanding
