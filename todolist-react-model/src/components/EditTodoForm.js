@@ -10,6 +10,7 @@ const EditTodoForm = ({editTodo, task}) => {
         editTodo(value, task.id);
         setValue("")
     }
+    
   return (
     <form className='EditTodoForm' onSubmit={handleSubmit}>
         <input type='text' className='todo-input' 
