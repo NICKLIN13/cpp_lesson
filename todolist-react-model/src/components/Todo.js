@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare} from '@fortawesome/free-solid-svg-icons'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
-const Todo = ({task, toggleComplete, deleteTodo, editTodo, detail}) => {
+const Todo = ({task, toggleComplete, deleteTodo, editTodo, description}) => {
   return (
     <div className='Todo'>
 		<summary>
@@ -14,7 +14,7 @@ const Todo = ({task, toggleComplete, deleteTodo, editTodo, detail}) => {
 			</div>
 		</summary>
 
-		<p class="todo-description">{detail.task}</p>
+		<p class="todo-description">{description}</p>
 
     </div>
   )

@@ -12,15 +12,9 @@ const TodoWrapper = () => {
 
 	const [todos, setTodos] = useState([])
 
-	const [description, setDescription] = useState([])
-
-	const addTodo = todo => {
-		setTodos([...todos, {id:uuidv4(), task: todo, completed: false, isEditing: false}])
+	const addTodo = (todo, description) => {
+		setTodos([...todos, {id:uuidv4(), task: todo, completed: false, isEditing: false, description: description}])
 		console.log(todos)
-	}
-
-	const addDetail = detail => {
-		setDescription([...description, {id: uuidv4(), task: detail}])
 	}
 
 	const toggleComplete = id => {
@@ -43,15 +37,15 @@ const TodoWrapper = () => {
 	return (
 		<div className='TodoWrapper'>
 			<h1>Get Things Done!</h1>
-			<TodoForm addTodo={addTodo} addDetail={addDetail}/>
+			<TodoForm addTodo={addTodo}/>
 
-			{todos.map((todo, index, detail) => (
+			{todos.map((todo, index) => (
 			todo.isEditing ? (
 				<EditTodoForm editTodo={editTask} task={todo}/>
 			) : (
 				<Todo task={todo} key={index} 
 				toggleComplete={toggleComplete} deleteTodo={deleteTodo} editTodo={editTodo}
-				detail={detail}/>
+				/>
 			)
 			))}
 
