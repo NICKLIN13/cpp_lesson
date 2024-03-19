@@ -29,9 +29,9 @@ const TodoWrapper = () => {
 		setTodos(todos.map(todo => todo.id === id ? {...todo, isEditing: !todo.isEditing} : todo))
 	}
 
-	const editTask = (task, id) => {
+	const editTask = (task, id, taskDescription) => {
 		setTodos(todos.map(todo => todo.id === id ? {
-				...todo, task, isEditing: !todo.isEditing } : todo))
+				...todo, task, isEditing: !todo.isEditing, taskDescription: taskDescription } : todo))
 	}
 
 	return (
@@ -47,8 +47,6 @@ const TodoWrapper = () => {
 				toggleComplete={toggleComplete} deleteTodo={deleteTodo} editTodo={editTodo} />
 			)
 			))}
-
-
 
 		</div>
 	)
