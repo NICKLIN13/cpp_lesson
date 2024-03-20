@@ -7,10 +7,18 @@ const EditTodoForm = ({editTodo, task}) => {
     const [description, setDescription] = useState(task.taskDescription) // DO I NEED THIS?  YES, I DO.
 
     const handleSubmit = e => {
-        e.preventDefault();
 
+      e.preventDefault();
+      
+
+      // Ensure that the user hasn't updated to blank
+      if(value.trim() === '') {
+        editTodo(task.task, task.id, description);
+      } else {
         editTodo(value, task.id, description);
-
+      }
+      
+      
     }
     
   return (
@@ -29,8 +37,6 @@ const EditTodoForm = ({editTodo, task}) => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         ></textarea>
-
-
 
     </form>
     
