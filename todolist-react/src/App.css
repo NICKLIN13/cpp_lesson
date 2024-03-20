@@ -8,7 +8,7 @@
 }
 
 body {
-  background: #8758ff;
+  background-color: rgb(250, 230, 203);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -63,6 +63,20 @@ h1 {
   width: 78px;
   height: 38.5px;
 }
+
+.update-btn {
+  background: #9a81d8;
+  color: #fff;
+  border: none;
+  padding: 0.55rem;
+  cursor: pointer;
+  width: 78px;
+  height: 38.5px;
+}
+
+
+
+
 
 .Todo {
   display: flex;

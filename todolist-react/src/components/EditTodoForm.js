@@ -28,7 +28,7 @@ const EditTodoForm = ({editTodo, task}) => {
         placeholder='Update Task'
         onChange={(e) => setValue(e.target.value)} />
 
-        <button type='submit' className='todo-btn'>Update</button>
+        <button type='submit' className='update-btn'>Update</button>
 
         <textarea
         id="todo-description-input"
