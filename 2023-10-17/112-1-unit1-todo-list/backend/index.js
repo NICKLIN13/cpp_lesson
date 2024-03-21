@@ -25,7 +25,7 @@ app.get("/hello", (_, res) => {
 });
 
 const port = process.env.PORT || 8000;
-
+// ui -> fe -> 8000 -> be -> orm(model -> schema) -> db
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URL, {

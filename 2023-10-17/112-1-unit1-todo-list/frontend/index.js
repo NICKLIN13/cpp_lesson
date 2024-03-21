@@ -3,7 +3,7 @@ const itemTemplate = document.querySelector("#todo-item-template");
 const todoList = document.querySelector("#todos");  // TODO
 
 const instance = axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL: "http://localhost:8000/api/todos",
 });
 
 async function main() {
