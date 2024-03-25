@@ -1,6 +1,6 @@
 import React from 'react'
 import TodoForm from './TodoForm'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import Todo from './Todo';
 import EditTodoForm from './EditTodoForm';
@@ -11,6 +11,17 @@ uuidv4();
 const TodoWrapper = () => {
 
 	const [todos, setTodos] = useState([])
+
+	useEffect(() => {
+		async function getTodos() {
+			const res = await fetch("/api/todos");
+			const todos = await res.json();
+			const todosFE = todos.map((todoBE) => ({...todoBE, "id": todoBE._id, task: todoBE.todo}));
+			setTodos(todosFE);
+		}
+		
+		getTodos();
+	}, [])
 
 	const addTodo = (todo, taskDescription) => {
 		setTodos([...todos, {id:uuidv4(), task: todo, completed: false, isEditing: false, taskDescription: taskDescription}])
