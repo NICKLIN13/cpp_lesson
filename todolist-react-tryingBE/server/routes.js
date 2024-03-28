@@ -25,17 +25,18 @@ router.get("/todos", async (req, res) => {
 // POST  /todos
 router.post("/todos", async(req, res) => {
     const collection = getCollection();
-    let { todo } = req.body;
+    let { task } = req.body;
 
-    if (!todo) {
+    if (!task) { // CHECK IF TODO IS EMPTY
+        console.log(req.body)
         return res.status(400).json({ mssg: "error no todo found"});
     }
 
-    todo = (typeof todo === "string") ? todo : JSON.stringify(todo);
+    task = (typeof task === "string") ? task : JSON.stringify(task);
 
-    const newTodo = await collection.insertOne({ todo, status: false });
+    const newTodo = await collection.insertOne({ todo: task, status: false });
 
-    res.status(201).json({ todo, status: false, _id: newTodo.insertedId });
+    res.status(201).json({ todo: task, status: false, _id: newTodo.insertedId });
 });
 
 

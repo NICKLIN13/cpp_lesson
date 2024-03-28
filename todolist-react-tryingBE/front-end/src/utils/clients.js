@@ -13,3 +13,8 @@ export function getHello() {
 export function getTodos() {
 	return instance.get("/todos");
 }
+
+export function addTodo(task, taskDescription) {
+	return instance.post("/todos", {task, taskDescription});
+}
+
