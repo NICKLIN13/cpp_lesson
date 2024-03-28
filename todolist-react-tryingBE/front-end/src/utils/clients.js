@@ -9,3 +9,7 @@ export function getHello() {
 	return instance.get("/hello");
 }
 
+
+export function getTodos() {
+	return instance.get("/todos");
+}
