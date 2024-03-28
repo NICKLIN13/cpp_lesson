@@ -5,27 +5,17 @@ import TodoWrapper from './components/TodoWrapper';
 import { useEffect } from 'react';
 import { useState } from 'react'; // 這只是新增試試看能不能串連後端的
 
-import axios from "axios";
-
-
-const instance = axios.create({
-	baseURL: "http://localhost:5001/api"
-});
-
-async function getHello() {
-	const res = await instance.get("/hello");
-	return res.data;
-}
+import { getHello } from "./utils/clients"
 
 function App() {
 	const [hello, setHello] = useState("default"); // 這只是新增試試看能不能串連後端的
 
 	useEffect(() => {
 		const init = async () => {
-			const data = await getHello();
+			const res = await getHello();
 			console.log("in useEffect");
-			console.log(data);
-			setHello(JSON.stringify(data))
+			console.log(res);
+			setHello(JSON.stringify(res.data))
 		}
 		
 		init()
