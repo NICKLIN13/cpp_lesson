@@ -26,14 +26,41 @@ yarn add express axios dotenv cors body-parser
 }
 ```
 
-### Try it! 
+#### 1.1.3. Create a new file `index.js`
 
-#### Run the server
-```bash
-yarn dev
+```javascript
+// ./backend/index.js
+import bodyParser from "body-parser";
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import mongoose from "mongoose";
+
+dotenv.config();
+
+const app = express();
+app.use(bodyParser.json());
+app.use(cors());
+
+// Hello world of API
+
+app.get("/", (_, res) => { 
+  return res.send({ message: "Hello World!" });
+});
+
+const port = process.env.PORT || 8000;
+app.listen(port, () =>
+  console.log(`Server running on port http://localhost:${port}`),
+);
 ```
-#### Test the server
+
+#### 1.1.4. Try it! 
+
 ```bash
+# Run the server
+yarn dev
+
+# Test the server
 curl http://localhost:8000
 ```
 
@@ -69,3 +96,20 @@ mongoose
     console.log(error.message);
   });
 ```
+
+## 2. Frontend
+
+### 2.1. Initialize the project
+
+#### 2.1.1. Create a new react app
+```bash
+yarn create react-app frontend
+cd frontend
+yarn add axios
+```
+
+#### 2.1.2. Try it!
+```bash
+yarn start
+```
+
