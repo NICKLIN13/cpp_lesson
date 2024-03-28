@@ -3,21 +3,21 @@ import './App.css';
 import axios from "axios";
 import { useState } from "react";
 
-import { env } from "./env";
 
 const instance = axios.create({
-  baseURL: env.BACKEND_API_URL,
+  baseURL: "http://localhost:8000",
 });
 
 async function getTodos() {
-  const response = await instance.get("/todos");
-  return response.data;
+  const res = await instance.get("/");
+  console.log(res)
+  return res.data;
 }
 
 
 
 function App() {
-  const [todos, setTodos] = useState('');
+  const [todos, setTodos] = useState('default');
 
   return (
     <div className="App">
@@ -36,9 +36,9 @@ function App() {
         </a>
         {/* test for BACKEND_API_URL: getTodos */}
         <button onClick={async () => {
-          const todos = await getTodos();
-          console.log(todos);
-          setTodos(todos);
+          const res = await getTodos();
+          console.log(JSON.stringify(res));
+          setTodos(JSON.stringify(res));
         }}>Get Todos</button>
         <p>Todos: {todos}</p> 
 
