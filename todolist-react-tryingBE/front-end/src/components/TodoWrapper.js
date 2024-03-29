@@ -15,10 +15,11 @@ const TodoWrapper = () => {
 
 	const [todos, setTodos] = useState([])
 
+	// PUT AWAIT ON EVERY LINE TO GET IT RENDERED IMMEDIATELLY
     async function renderTodos() {
 		const res = await getTodos();
-		const todos = res.data;
-		const todosFE = todos.map((todoBE) => ({...todoBE, "id": todoBE._id, task: todoBE.todo}));
+		const todos = await res.data;
+		const todosFE = await todos.map((todoBE) => ({...todoBE, "id": todoBE._id, task: todoBE.todo}));
 		setTodos(todosFE);
 	}
 
