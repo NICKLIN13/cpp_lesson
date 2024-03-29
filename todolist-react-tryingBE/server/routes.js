@@ -6,7 +6,7 @@ const { ObjectId } = require("mongodb");
 
 
 
-
+// GET STORED TODOS FROM DB 
 const getCollection = () => {
     const client = getConnectedClient();
     const collection = client.db("todosdb").collection("todos");
@@ -25,17 +25,21 @@ router.get("/todos", async (req, res) => {
 // POST  /todos
 router.post("/todos", async(req, res) => {
     const collection = getCollection();
-    let { task } = req.body;
+    let task = req.body.task;
 
-    if (!task) { // CHECK IF TODO IS EMPTY
+    // CHECK IF TODO IS EMPTY
+    if (!task) { 
         console.log(req.body)
         return res.status(400).json({ mssg: "error no todo found"});
     }
 
+    // MAKE TASKS INTO STRINGS ANYWAY
     task = (typeof task === "string") ? task : JSON.stringify(task);
 
+    // INSERT THE TASK INTO THE COLLECTION YOU GOT
     const newTodo = await collection.insertOne({ todo: task, status: false });
 
+    // RESPOND SOME NECESSARY INFORMATION
     res.status(201).json({ todo: task, status: false, _id: newTodo.insertedId });
 });
 
@@ -68,5 +72,5 @@ router.put("/todos/:id", async(req, res) => {
     res.status(200).json(updatedTodo);
 });
 
-
+// MAKE THE REPETITION PART OF URLs A ROUTER AND EXPORT IT
 module.exports = router;

@@ -13,8 +13,9 @@ const options = {
 };
 
 
+// CLIENT CONTAINS METHODS
 let client;
-
+// TO SEE IF CLIENT HAS BEEN DEFINED. IF NOT, DEFINE IT SITH URI & OPTIONS.
 const connectToMongoDB = async () => {
     if (!client) {
         try {
@@ -29,4 +30,6 @@ const connectToMongoDB = async () => {
 
 const getConnectedClient = () => client;
 
+
+// EXPORT THESE FUNCTION, ALLOWING OTHERS TO USE
 module.exports = { connectToMongoDB, getConnectedClient};
