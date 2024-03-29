@@ -12,11 +12,6 @@ const router = require("./routes");
 
 app.use("/api", router)
 
-// GET WRONG SOMEHOW IF DELETED
-app.get("/api/hello", async (req, res) => {
-    res.status(200).json({"message": "Hello, world!"});
-});
-
 const port = process.env.PORT || 5001;
 
 async function startServer() {
