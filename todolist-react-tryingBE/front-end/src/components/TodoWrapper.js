@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import Todo from './Todo';
 import EditTodoForm from './EditTodoForm';
-import { getTodos, addTodo as add, deleteTodo as del } from '../utils/clients';
+import { getTodos, addTodo as add, deleteTodo as del, editTask as editTaskDescription } from '../utils/clients';
 
 
 
@@ -15,11 +15,10 @@ const TodoWrapper = () => {
 
 	const [todos, setTodos] = useState([])
 
-	// PUT AWAIT ON EVERY LINE TO GET IT RENDERED IMMEDIATELLY
     async function renderTodos() {
 		const res = await getTodos();
-		const todos = await res.data;
-		const todosFE = await todos.map((todoBE) => ({...todoBE, "id": todoBE._id, task: todoBE.todo}));
+		const todos = res.data;
+		const todosFE = todos.map((todoBE) => ({...todoBE, "id": todoBE._id, task: todoBE.todo}));
 		setTodos(todosFE);
 	}
 
@@ -30,13 +29,10 @@ const TodoWrapper = () => {
 
 	async function addTodo(todo, taskDescription) {
 		// setTodos([...todos, {id:uuidv4(), task: todo, completed: false, isEditing: false, taskDescription: taskDescription}])
-		await add(todo, taskDescription)
+		await add(todo, taskDescription) // PUT AWAIT TO RENDER WITH ADDEDTODO IMMEDIATELY
 		renderTodos()
 		console.log(todos)
 	}
-
-
-
 
 	const toggleComplete = id => {
 		setTodos(todos.map(todo => todo.id === id ? {...todo, completed : !todo.completed} : todo))
@@ -58,9 +54,15 @@ const TodoWrapper = () => {
 		setTodos(todos.map(todo => todo.id === id ? {...todo, isEditing: !todo.isEditing} : todo))
 	} // toggle
 
-	const editTask = (task, id, taskDescription) => {
-		setTodos(todos.map(todo => todo.id === id ? {
-				...todo, task, isEditing: !todo.isEditing, taskDescription: taskDescription } : todo))
+
+	async function editTask (task, id, taskDescription) {
+		// setTodos(todos.map(todo => todo.id === id ? {
+		// 		...todo, task, isEditing: !todo.isEditing, taskDescription: taskDescription } : todo))
+		
+		await editTaskDescription(task, id, taskDescription);
+
+		renderTodos();
+		console.log(todos);
 	}
 
 	return (

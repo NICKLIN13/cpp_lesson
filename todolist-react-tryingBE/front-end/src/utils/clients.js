@@ -19,3 +19,7 @@ export function addTodo(task, taskDescription) {
 export function deleteTodo(_id) {
 	return instance.delete("/todos", {_id})
 }
+
+export function editTask(task, _id, taskDescription) {
+	return instance.put("/todos", {task, _id, taskDescription})
+}
