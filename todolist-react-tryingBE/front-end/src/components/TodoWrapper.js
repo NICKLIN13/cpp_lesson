@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import Todo from './Todo';
 import EditTodoForm from './EditTodoForm';
-import { getTodos, addTodo as add } from '../utils/clients';
+import { getTodos, addTodo as add, deleteTodo as del } from '../utils/clients';
 
 
 
@@ -14,6 +14,7 @@ uuidv4();
 const TodoWrapper = () => {
 
 	const [todos, setTodos] = useState([])
+
     async function renderTodos() {
 		const res = await getTodos();
 		const todos = res.data;
@@ -33,12 +34,23 @@ const TodoWrapper = () => {
 		console.log(todos)
 	}
 
+
+
+
 	const toggleComplete = id => {
 		setTodos(todos.map(todo => todo.id === id ? {...todo, completed : !todo.completed} : todo))
 	}
 
-	const deleteTodo = id => {
-		setTodos(todos.filter(todo => todo.id !== id))
+	const deleteTodo = async (id) => {
+		// setTodos(todos.filter(todo => todo.id !== id))
+
+		await fetch(`api/todos/${id}`, {
+			method : "DELETE"
+		})
+
+		// await del(id)
+		renderTodos()
+		console.log(todos)
 	}
 
 	const editTodo = id => {

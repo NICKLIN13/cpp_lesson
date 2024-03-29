@@ -26,6 +26,7 @@ router.get("/todos", async (req, res) => {
 router.post("/todos", async(req, res) => {
     const collection = getCollection();
     let task = req.body.task;
+    let taskDescription = req.body.taskDescription;
 
     // CHECK IF TODO IS EMPTY
     if (!task) { 
@@ -35,9 +36,10 @@ router.post("/todos", async(req, res) => {
 
     // MAKE TASKS INTO STRINGS ANYWAY
     task = (typeof task === "string") ? task : JSON.stringify(task);
+    taskDescription = (typeof taskDescription === "string") ? taskDescription : JSON.stringify(taskDescription);
 
     // INSERT THE TASK INTO THE COLLECTION YOU GOT
-    const newTodo = await collection.insertOne({ todo: task, status: false });
+    const newTodo = await collection.insertOne({ todo: task, status: false, taskDescription: taskDescription });
 
     // RESPOND SOME NECESSARY INFORMATION
     res.status(201).json({ todo: task, status: false, _id: newTodo.insertedId });
