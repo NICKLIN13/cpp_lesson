@@ -30,8 +30,8 @@ const TodoWrapper = () => {
 
 	async function addTodo(todo, taskDescription) {
 		// setTodos([...todos, {id:uuidv4(), task: todo, completed: false, isEditing: false, taskDescription: taskDescription}])
-		add(todo, taskDescription)
-		await renderTodos()
+		await add(todo, taskDescription)
+		renderTodos()
 		console.log(todos)
 	}
 
