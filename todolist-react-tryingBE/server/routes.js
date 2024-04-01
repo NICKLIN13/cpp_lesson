@@ -62,6 +62,7 @@ router.delete("/todos/:id", async(req, res) => {
 router.put("/todos/:id", async(req, res) => {
     const collection = getCollection();
     const _id = new ObjectId(req.params.id);
+    console.log(req.body)
 
     const { status } = req.body;
 

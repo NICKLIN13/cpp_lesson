@@ -4,7 +4,13 @@ import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import Todo from './Todo';
 import EditTodoForm from './EditTodoForm';
-import { getTodos, addTodo as add, deleteTodo as del, editTask as editTaskDescription } from '../utils/clients';
+import { 
+	getTodos, 
+	addTodo as add, 
+	deleteTodo as del, 
+	editTask as editTaskDescription,
+	toggleComplete as toggle
+} from '../utils/clients';
 
 
 
@@ -34,8 +40,15 @@ const TodoWrapper = () => {
 		console.log(todos)
 	}
 
-	const toggleComplete = id => {
-		setTodos(todos.map(todo => todo.id === id ? {...todo, completed : !todo.completed} : todo))
+	const toggleComplete = async (id) => {
+		array.forEach(todo => {
+			if (todo.id === id) {
+				const { completed } = todo;
+			}
+			
+		});
+		// todos.map(todo => todo.id === id ? {...todo, completed : !todo.completed} : todo)
+		await toggle(id, { completed })
 	}
 
 	const deleteTodo = async (id) => {
