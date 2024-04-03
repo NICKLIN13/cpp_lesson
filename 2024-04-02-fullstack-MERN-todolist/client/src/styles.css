@@ -105,7 +105,7 @@ body {
   background-color: rgba(235, 212, 246, 0.705);
   width: 50%;
   font-size: 1.4rem;
-  border-radius: 1rem;
+  border-radius: 0.25rem;
   transition: all 0.025s;
 
   &:hover {
@@ -153,7 +153,9 @@ body {
   border: none;
   outline: none;
 
-  &:focus,
+  &:focus {
+    background-color: white;
+  }
 }
 
 .form__button {
@@ -166,5 +168,22 @@ body {
 
   &:hover {
     background-color: rgba(246, 220, 73, 1.06);
+  }
+}
+
+
+@media (max-width: 420px) {
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .form {
+    width: 95%;
+  }
+
+  .todo {
+    width: 88.5%;
+    font-size: 1.15rem;
+    padding: 0.8rem 0.8rem;
   }
 }
