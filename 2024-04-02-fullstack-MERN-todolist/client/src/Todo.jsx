@@ -43,7 +43,7 @@ export default function Todo(props) {
     return (
         <div className="todo">
             <p>{todo.todo}</p>
-            <div>
+            <div className="mutations">
                 <button
                     className="todo__status"
                     onClick={() => updateTodo(todo._id, todo.status)}
