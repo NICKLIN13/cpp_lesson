@@ -23,10 +23,9 @@ const TodoWrapper = () => {
 
   async function renderTodos() {
 		const res = await getTodos();
-		const todos_BE = res.data;
-		const todos_FE = todos_BE.map((todo) => ({
-      ...todo,
-      id: todo._id}));
+		const todos_FE = res.data.map((todo_BE) => ({
+      ...todo_BE,
+      id: todo_BE._id}));
 		setTodos(todos_FE);
 	}
 
@@ -43,16 +42,15 @@ const TodoWrapper = () => {
 	}
 
 	const toggleComplete = async (id) => {
-    let status;
+    let completed;
 		todos.forEach(todo => {
 			if (todo.id === id) {
         console.log(todo);
-				status = todo.status;
+				completed = todo.completed;
 			}
 			
 		});
-		// todos.map(todo => todo.id === id ? {...todo, completed : !todo.completed} : todo)
-		await toggle(id, status)
+		await toggle(id, completed)
 		renderTodos()
     console.log(todos)
 	}

@@ -9,7 +9,7 @@ const Todo = ({ todo, toggleComplete, deleteTodo, editTodo }) => {
 
 		<details id="" class="todo-item">
 			<summary >
-				<p onClick={(e) => {e.preventDefault(); toggleComplete(todo.id)}} className={`${todo.completed ? 'completed': ""}`}>{todo.title}</p>
+				<p onClick={(e) => {e.preventDefault(); toggleComplete(todo.id)}} className={`${todo.completed ? "completed": ""}`}>{todo.title}</p>
 
 				<div>
 					<FontAwesomeIcon icon={faPenToSquare} onClick={() => editTodo(todo.id)}/>

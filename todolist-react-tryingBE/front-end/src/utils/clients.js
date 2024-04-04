@@ -26,5 +26,5 @@ export function editTask(id, taskDescription) {
 }
 
 export function toggleComplete(id, completed) {
-	return instance.put(`/todos/${id}`, {status: completed})
+	return instance.put(`/todos/${id}`, {completed: completed})
 }
