@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 
-const TodoForm = ({addTodo}) => {
+const TodoForm = ({ addTodo }) => {
     const [title, setTitle] = useState("")
 
     const [description, setDescription] = useState("") // DO I NEED THIS?  YES, I DO.

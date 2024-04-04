@@ -1,10 +1,10 @@
 import React from 'react'
 import { useState } from 'react'
 
-const EditTodoForm = ({editTodo, task}) => {
-    const [title, setTitle] = useState(task.task)
+const EditTodoForm = ({editTodo, todo}) => {
+    const [title, setTitle] = useState(todo.title)
 
-    const [description, setDescription] = useState(task.taskDescription) // DO I NEED THIS?  YES, I DO.
+    const [description, setDescription] = useState(todo.description) // DO I NEED THIS?  YES, I DO.
 
     const handleSubmit = e => {
 
@@ -13,9 +13,9 @@ const EditTodoForm = ({editTodo, task}) => {
 
       // Ensure that the user hasn't updated to blank
       if(title.trim() === '') {
-        editTodo(task.task, task.id, description);
+        editTodo(todo.title, todo.id, description);
       } else {
-        editTodo(title, task.id, description);
+        editTodo(title, todo.id, description);
       }
       
       

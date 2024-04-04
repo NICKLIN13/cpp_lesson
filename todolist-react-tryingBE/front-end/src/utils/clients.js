@@ -12,8 +12,8 @@ export function getTodos() {
 	return instance.get("/todos");
 }
 
-export function addTodo(task, taskDescription) {
-	return instance.post("/todos", {task, taskDescription});
+export function addTodo(title, description) {
+	return instance.post("/todos", {title: title, description: description});
 }
 
 export function deleteTodo(_id) {

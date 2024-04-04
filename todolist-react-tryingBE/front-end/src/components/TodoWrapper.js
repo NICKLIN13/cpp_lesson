@@ -21,12 +21,12 @@ const TodoWrapper = () => {
 
 	const [todos, setTodos] = useState([])
 
-    async function renderTodos() {
+  async function renderTodos() {
 		const res = await getTodos();
 		const todos_BE = res.data;
-		const todos_FE = todos_BE.map((todoBE) => ({
-      id: todoBE._id,
-      task: todoBE.todo}));
+		const todos_FE = todos_BE.map((todo) => ({
+      ...todo,
+      id: todo._id}));
 		setTodos(todos_FE);
 	}
 
@@ -35,9 +35,9 @@ const TodoWrapper = () => {
 	}, [])
 
 
-	async function addTodo(todo, taskDescription) {
+	async function addTodo(todo, description) {
 
-		await add(todo, taskDescription) // PUT AWAIT TO RENDER WITH ADDEDTODO IMMEDIATELY
+		await add(todo, description) // PUT AWAIT TO RENDER WITH ADDEDTODO IMMEDIATELY
 		renderTodos()
 		console.log(todos)
 	}
@@ -74,11 +74,8 @@ const TodoWrapper = () => {
 	} // toggle
 
 
-	async function editTask (task, id, taskDescription) {
-		// setTodos(todos.map(todo => todo.id === id ? {
-		// 		...todo, task, isEditing: !todo.isEditing, taskDescription: taskDescription } : todo))
-		
-		await editTaskDescription(task, id, taskDescription);
+	async function editTask (todo, id, description) {
+		await editTaskDescription(todo, id, description);
 
 		renderTodos();
 		console.log(todos);
@@ -91,10 +88,14 @@ const TodoWrapper = () => {
 			
 			{todos.map((todo, index,) => (
 			todo.isEditing ? (
-				<EditTodoForm editTodo={editTask} task={todo}/>
+				<EditTodoForm editTodo={editTask} todo={todo}/>
 			) : (
-				<Todo task={todo} key={index} 
-				toggleComplete={toggleComplete} deleteTodo={deleteTodo} editTodo={editTodo} />
+				<Todo
+          todo={todo}
+				  toggleComplete={toggleComplete}
+          deleteTodo={deleteTodo}
+          editTodo={editTodo} 
+        />
 			)
 			))}
 
