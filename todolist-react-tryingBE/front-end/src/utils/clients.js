@@ -20,10 +20,6 @@ export function deleteTodo(_id) {
 	return instance.delete("/todos", {_id})
 }
 
-export function editTask(id, taskDescription) {
-	return instance.put(`/todos/${id}`, {taskDescription})
-}
-
 export function toggleComplete(id, title, description, completed ) {
 	return instance.put(`/todos/${id}`, { title, description, completed })
 }

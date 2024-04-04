@@ -8,7 +8,6 @@ import {
 	getTodos, 
 	addTodo as add, 
 	deleteTodo as del, 
-	editTask as editTaskDescription,
 	toggleComplete as toggle
 } from '../utils/clients';
 
@@ -68,14 +67,15 @@ const TodoWrapper = () => {
 		console.log(todos)
 	}
 
-	const editTodo = id => {
-		setTodos(todos.map(todo => todo.id === id ? {...todo, isEditing: !todo.isEditing} : todo))
-	} // toggle
-
-
-	async function editTask (todo, id, description) {
-		await editTaskDescription(todo, id, description);
-
+	async function editTodo (id, title, description) {
+    let completed;
+		todos.forEach(todo => {
+			if (todo.id === id) {
+        console.log(todo);
+        completed = todo.completed;
+			}
+		});
+		await toggle(id, title, description, completed)
 		renderTodos();
 		console.log(todos);
 	}
@@ -87,7 +87,7 @@ const TodoWrapper = () => {
 			
 			{todos.map((todo, index,) => (
 			todo.isEditing ? (
-				<EditTodoForm editTodo={editTask} todo={todo}/>
+				<EditTodoForm editTodo={editTodo} todo={todo}/>
 			) : (
 				<Todo
           todo={todo}
