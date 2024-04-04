@@ -23,9 +23,11 @@ const TodoWrapper = () => {
 
     async function renderTodos() {
 		const res = await getTodos();
-		const todos = res.data;
-		const todosFE = todos.map((todoBE) => ({...todoBE, "id": todoBE._id, task: todoBE.todo}));
-		setTodos(todosFE);
+		const todos_BE = res.data;
+		const todos_FE = todos_BE.map((todoBE) => ({
+      id: todoBE._id,
+      task: todoBE.todo}));
+		setTodos(todos_FE);
 	}
 
 	useEffect(() => {	
@@ -34,7 +36,7 @@ const TodoWrapper = () => {
 
 
 	async function addTodo(todo, taskDescription) {
-		// setTodos([...todos, {id:uuidv4(), task: todo, completed: false, isEditing: false, taskDescription: taskDescription}])
+
 		await add(todo, taskDescription) // PUT AWAIT TO RENDER WITH ADDEDTODO IMMEDIATELY
 		renderTodos()
 		console.log(todos)

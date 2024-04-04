@@ -39,7 +39,7 @@ h1 {
 
 }
 
-.todo-input {
+.title-input {
   outline: none;
   background: none;
   border: 1px solid #ffffff;
@@ -50,7 +50,7 @@ h1 {
   color: #fff;
 }
 
-.todo-input::placeholder {
+.title-input::placeholder {
   color: #ffffff81;
 }
 
