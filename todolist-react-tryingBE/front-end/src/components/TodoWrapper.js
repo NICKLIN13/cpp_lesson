@@ -41,14 +41,18 @@ const TodoWrapper = () => {
 	}
 
 	const toggleComplete = async (id) => {
-		array.forEach(todo => {
+    let status;
+		todos.forEach(todo => {
 			if (todo.id === id) {
-				const { completed } = todo;
+        console.log(todo);
+				status = todo.status;
 			}
 			
 		});
 		// todos.map(todo => todo.id === id ? {...todo, completed : !todo.completed} : todo)
-		await toggle(id, { completed })
+		await toggle(id, status)
+		renderTodos()
+    console.log(todos)
 	}
 
 	const deleteTodo = async (id) => {
