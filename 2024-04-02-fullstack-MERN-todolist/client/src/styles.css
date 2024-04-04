@@ -83,6 +83,7 @@ body {
 
 /* todos list */
 .title {
+  
   text-align: center;
   font-size: 3rem;
   padding: 3rem 0 1rem;
@@ -102,14 +103,16 @@ body {
   justify-content: space-between;
   padding: 1rem 1.25rem;
 
-  background-color: rgba(235, 212, 246, 0.705);
+  /* background-color: rgba(235, 212, 246, 0.705); */
+  background-color: rgba(64, 184, 217, 0.917);
   width: 50%;
   font-size: 1.4rem;
   border-radius: 0.25rem;
   transition: all 0.025s;
 
   &:hover {
-    background-color: rgba(235, 212, 246, 0.805);
+    /* background-color: rgba(235, 212, 246, 0.805); */
+    background-color: rgba(64, 184, 217, 1.117);
   }
 }
 
