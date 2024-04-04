@@ -64,13 +64,21 @@ router.put("/todos/:id", async(req, res) => {
     const _id = new ObjectId(req.params.id);
     console.log(req.body)
 
-    const { completed } = req.body;
+    let { title, description, completed } = req.body;
+
+    if (!title) { 
+      console.log(req.body)
+      return res.status(400).json({ mssg: "error no todo found"});
+    }
+
+    title = (typeof title === "string") ? title : JSON.stringify(title);
+    description = (typeof description === "string") ? description : JSON.stringify(description);
 
     if (typeof completed !== "boolean") {
         return res.status(400).json({ mssg: "invalid status" });
     }
 
-    const updatedTodo = await collection.updateOne({ _id }, { $set: {completed: !completed} });
+    const updatedTodo = await collection.updateOne({ _id }, { $set: { title: title, completed: completed, description: description } });
 
     res.status(200).json(updatedTodo);
 });

@@ -42,15 +42,16 @@ const TodoWrapper = () => {
 	}
 
 	const toggleComplete = async (id) => {
-    let completed;
+    let title, description, completed;
 		todos.forEach(todo => {
 			if (todo.id === id) {
         console.log(todo);
-				completed = todo.completed;
+				title = todo.title;
+        description = todo.description
+        completed = todo.completed;
 			}
-			
 		});
-		await toggle(id, completed)
+		await toggle(id, title, description, !completed)
 		renderTodos()
     console.log(todos)
 	}

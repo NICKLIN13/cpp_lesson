@@ -13,7 +13,7 @@ export function getTodos() {
 }
 
 export function addTodo(title, description) {
-	return instance.post("/todos", {title: title, description: description});
+	return instance.post("/todos", {title, description});
 }
 
 export function deleteTodo(_id) {
@@ -21,10 +21,9 @@ export function deleteTodo(_id) {
 }
 
 export function editTask(id, taskDescription) {
-	// return instance.put(`/todos/${id}`, {taskDescription})
-	return
+	return instance.put(`/todos/${id}`, {taskDescription})
 }
 
-export function toggleComplete(id, completed) {
-	return instance.put(`/todos/${id}`, {completed: completed})
+export function toggleComplete(id, title, description, completed ) {
+	return instance.put(`/todos/${id}`, { title, description, completed })
 }
