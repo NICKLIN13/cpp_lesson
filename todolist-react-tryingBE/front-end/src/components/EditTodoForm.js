@@ -13,9 +13,9 @@ const EditTodoForm = ({editTodo, todo}) => {
 
       // Ensure that the user hasn't updated to blank
       if(title.trim() === '') {
-        editTodo(todo.title, todo.id, description);
+        editTodo(todo.id, todo.title, description);
       } else {
-        editTodo(title, todo.id, description);
+        editTodo(todo.id, title, description);
       }
       
       

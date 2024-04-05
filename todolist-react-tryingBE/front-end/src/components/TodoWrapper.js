@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import Todo from './Todo';
 import EditTodoForm from './EditTodoForm';
-import { 
-	getTodos, 
-	addTodo as add, 
-	deleteTodo as del, 
+import {
+	getTodos,
+	addTodo as add,
+	// deleteTodo as del,
 	toggleComplete as toggle
 } from '../utils/clients';
 
@@ -20,15 +20,16 @@ const TodoWrapper = () => {
 
 	const [todos, setTodos] = useState([])
 
-  async function renderTodos() {
+	async function renderTodos() {
 		const res = await getTodos();
 		const todos_FE = res.data.map((todo_BE) => ({
-      ...todo_BE,
-      id: todo_BE._id}));
+			...todo_BE,
+			id: todo_BE._id
+		}));
 		setTodos(todos_FE);
 	}
 
-	useEffect(() => {	
+	useEffect(() => {
 		renderTodos();
 	}, [])
 
@@ -41,25 +42,25 @@ const TodoWrapper = () => {
 	}
 
 	const toggleComplete = async (id) => {
-    let title, description, completed;
+		let title, description, completed;
 		todos.forEach(todo => {
 			if (todo.id === id) {
-        console.log(todo);
+				console.log(todo);
 				title = todo.title;
-        description = todo.description
-        completed = todo.completed;
+				description = todo.description
+				completed = todo.completed;
 			}
 		});
 		await toggle(id, title, description, !completed)
 		renderTodos()
-    console.log(todos)
+		console.log(todos)
 	}
 
 	const deleteTodo = async (id) => {
 		// setTodos(todos.filter(todo => todo.id !== id))
 
 		await fetch(`api/todos/${id}`, {
-			method : "DELETE"
+			method: "DELETE"
 		})
 
 		// await del(id)
@@ -67,15 +68,16 @@ const TodoWrapper = () => {
 		console.log(todos)
 	}
 
-	async function editTodo (id, title, description) {
-    let completed;
+	async function editTodo(id, title, description) {
+		let completed, isEditing;
 		todos.forEach(todo => {
 			if (todo.id === id) {
-        console.log(todo);
-        completed = todo.completed;
+				console.log(todo);
+				completed = todo.completed;
+				isEditing = !todo.isEditing;
 			}
 		});
-		await toggle(id, title, description, completed)
+		await toggle(id, title, description, completed, isEditing)
 		renderTodos();
 		console.log(todos);
 	}
@@ -83,19 +85,19 @@ const TodoWrapper = () => {
 	return (
 		<div className='TodoWrapper'>
 			<h1>Get Things Done!</h1>
-			<TodoForm addTodo={addTodo}/>
-			
+			<TodoForm addTodo={addTodo} />
+
 			{todos.map((todo, index,) => (
-			todo.isEditing ? (
-				<EditTodoForm editTodo={editTodo} todo={todo}/>
-			) : (
-				<Todo
-          todo={todo}
-				  toggleComplete={toggleComplete}
-          deleteTodo={deleteTodo}
-          editTodo={editTodo} 
-        />
-			)
+				todo.isEditing ? (
+					<EditTodoForm editTodo={editTodo} todo={todo} />
+				) : (
+					<Todo
+						todo={todo}
+						toggleComplete={toggleComplete}
+						deleteTodo={deleteTodo}
+						editTodo={editTodo}
+					/>
+				)
 			))}
 
 		</div>

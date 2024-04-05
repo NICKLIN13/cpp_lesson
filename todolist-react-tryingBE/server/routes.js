@@ -39,10 +39,10 @@ router.post("/todos", async(req, res) => {
     description = (typeof description === "string") ? description : JSON.stringify(description);
 
     // INSERT THE TASK INTO THE COLLECTION YOU GOT
-    const newTodo = await collection.insertOne({ title: title, completed: false, description: description });
+    const newTodo = await collection.insertOne({ title: title, completed: false, description: description, isEditing: false });
 
     // RESPOND SOME NECESSARY INFORMATION
-    res.status(201).json({ title: title, completed: false, _id: newTodo.insertedId });
+    res.status(201).json({ title: title, completed: false, _id: newTodo.insertedId, isEditing: false });
 });
 
 
@@ -64,7 +64,7 @@ router.put("/todos/:id", async(req, res) => {
     const _id = new ObjectId(req.params.id);
     console.log(req.body)
 
-    let { title, description, completed } = req.body;
+    let { title, description, completed, isEditing } = req.body;
 
     if (!title) { 
       console.log(req.body)
@@ -78,7 +78,7 @@ router.put("/todos/:id", async(req, res) => {
         return res.status(400).json({ mssg: "invalid status" });
     }
 
-    const updatedTodo = await collection.updateOne({ _id }, { $set: { title: title, completed: completed, description: description } });
+    const updatedTodo = await collection.updateOne({ _id }, { $set: { title: title, completed: completed, description: description, isEditing: isEditing } });
 
     res.status(200).json(updatedTodo);
 });
