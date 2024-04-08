@@ -16,8 +16,8 @@ export function addTodo(title, description) {
 	return instance.post("/todos", {title, description});
 }
 
-export function deleteTodo(_id) {
-	return instance.delete("/todos", {_id})
+export function deleteTodo(id) {
+	return instance.delete(`/todos/${id}`, {id})
 }
 
 export function toggleComplete(id, title, description, completed, isEditing ) {

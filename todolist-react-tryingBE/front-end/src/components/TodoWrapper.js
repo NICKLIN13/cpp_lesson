@@ -7,7 +7,7 @@ import EditTodoForm from './EditTodoForm';
 import {
 	getTodos,
 	addTodo as add,
-	// deleteTodo as del,
+	deleteTodo as del,
 	toggleComplete as toggle
 } from '../utils/clients';
 
@@ -56,14 +56,18 @@ const TodoWrapper = () => {
 		console.log(todos)
 	}
 
-	const deleteTodo = async (id) => {
-		// setTodos(todos.filter(todo => todo.id !== id))
+	// const deleteTodo = async (id) => {
 
-		await fetch(`api/todos/${id}`, {
-			method: "DELETE"
-		})
+	// 	await fetch(`api/todos/${id}`, {
+	// 		method: "DELETE"
+	// 	})
 
-		// await del(id)
+	// 	renderTodos()
+	// 	console.log(todos)
+	// }
+
+	async function deleteTodo(id) {
+		await del (id)
 		renderTodos()
 		console.log(todos)
 	}
