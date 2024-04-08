@@ -25,8 +25,7 @@ router.get("/todos", async (req, res) => {
 // POST  /todos
 router.post("/todos", async(req, res) => {
     const collection = getCollection();
-    let title = req.body.title;
-    let description = req.body.description;
+    let { title, description } = req.body;
 
     // CHECK IF title IS EMPTY
     if (!title) { 
@@ -38,11 +37,13 @@ router.post("/todos", async(req, res) => {
     title = (typeof title === "string") ? title : JSON.stringify(title);
     description = (typeof description === "string") ? description : JSON.stringify(description);
 
+    const data = { title, description, completed: false, isEditing: false }
+
     // INSERT THE TASK INTO THE COLLECTION YOU GOT
-    const newTodo = await collection.insertOne({ title: title, completed: false, description: description, isEditing: false });
+    const resFromDB = await collection.insertOne(data);
 
     // RESPOND SOME NECESSARY INFORMATION
-    res.status(201).json({ title: title, completed: false, _id: newTodo.insertedId, isEditing: false });
+    res.status(201).json({title: data.title, _id: resFromDB.insertedId });
 });
 
 
