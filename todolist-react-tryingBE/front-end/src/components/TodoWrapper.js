@@ -1,5 +1,5 @@
 import React from 'react'
-import TodoForm from './TodoForm'
+import AddTodoForm from './AddTodoForm'
 import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import Todo from './Todo';
@@ -89,7 +89,7 @@ const TodoWrapper = () => {
 	return (
 		<div className='TodoWrapper'>
 			<h1>Get Things Done!</h1>
-			<TodoForm addTodo={addTodo} />
+			<AddTodoForm addTodo={addTodo} />
 
 			{todos.map((todo, index,) => (
 				todo.isEditing ? (
