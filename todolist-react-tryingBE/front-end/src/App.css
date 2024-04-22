@@ -161,3 +161,37 @@ textarea#todo-description-input {
   background-color: #ccc;
   margin: 0.8rem 0;
 }
+
+
+@media only screen and (max-width: 600px) {
+  .TodoWrapper {
+    width: 100%;
+  }
+
+  .title-input {
+    width: 80%;
+    max-width: 300px;
+  }
+
+  button.todo-btn,
+  button.update-btn{
+    width: 20%;
+  }
+
+  textarea#todo-description-input {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .Todo{
+    width: 100%;
+    max-width: 300px;
+  }
+
+
+  .TodoForm{
+    width: 100%;
+    max-width:300px;
+  }
+
+}
