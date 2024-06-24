@@ -1,0 +1,32 @@
+{%extends "linbase.html"%}
+
+{%block linpagetitle%}
+LIN NICKLIN - 用戶管理
+{%endblock%}
+
+{%block lincontent%}
+<h1>會員資料管理</h1> <br>
+<table border="1" cellpadding="5" cellspacing="0">
+    <tr>
+        <th>會員編號</th>
+        <th>會員名稱</th>
+        <th>密碼</th>
+        <th>真實姓名</th>
+        <th>性別</th>
+        <th>年齡</th>
+        <th>#</th>
+    </tr>
+    {%for user in myUsers2%}
+        <tr>
+            <td>{{user.userID}}</td>
+            <td>{{user.username}}</td>
+            <td>{{user.password}}</td>
+            <td>{{user.truename}}</td>
+            <td>{{user.gender}}</td>
+            <td>{{user.age}}</td>
+            <td><a href="/userlist/edit/?userID={{user.userID}}">編輯</a> <a href="/userlist/del">刪除</a></td>
+        </tr>
+    {%endfor%}
+</table>
+{%endblock%}
+

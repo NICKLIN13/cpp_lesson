@@ -1,0 +1,43 @@
+:root {
+    --todo-input-height: 3rem;
+    --todo-input-font-size: 2rem;
+}
+
+body {
+    background-color: #f4f3e1;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 15vh;
+}
+
+h1 {
+    text-align: center;
+    font-size: 6rem;
+}
+
+#todo-input-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+input#heading-input {
+    flex-grow: 1;
+}
+
+input#heading-input,
+button#change-heading {
+    height: var(--todo-input-height);
+    font-size: var(--todo-input-font-size);
+    border-radius: 0.5rem;
+    padding: 0 0.5rem;
+}
+
+button#counterbtn {
+    height: var(--todo-input-height);
+    font-size: var(--todo-input-font-size);
+    border-radius: 0.5rem;
+    padding: 0 0.5rem;
+}

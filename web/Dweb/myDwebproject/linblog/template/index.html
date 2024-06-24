@@ -1,0 +1,39 @@
+{% extends "linbase.html"%}
+{%load linfilter%}
+
+{%block linpagetitle%}
+LIN NICKLIN - home
+{%endblock%}
+
+
+{% block lincontent%}
+LIN NICKLIN {{Playlist | default:" 『尚未設定此欄位』"}} <br/>
+
+<img src="/static/img/getImage拷貝.jpg" alt="這是一隻小鼠波波">
+<br/>
+我發了一些歌：
+
+<ol>
+    <li>日和</li>
+    <li>牡丹</li>
+    <li>迷途</li>
+</ol>
+
+我只是在做實驗：<br/>
+{{ArticleList.0.title}}
+
+<br/>
+<br/>
+
+最新消息：
+<ol>
+    {%for article in ArticleList%}
+        <li style="color:blue">{{article.title|myFilterMGW:"I love you"}}</li>
+    {%empty%}
+        <li>『暫時還沒有文章』</li>
+    {%endfor%}
+</ol>
+
+<hr>
+{%include "comments.html"%}
+{% endblock %}
